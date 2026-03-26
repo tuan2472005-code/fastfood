@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBUtil {
-    private static final String DEFAULT_URL ="jdbc:mysql://crossover.proxy.rlwy.net:47972/railway";
+    private static final String DEFAULT_URL ="jdbc:mysql://crossover.proxy.rlwy.net:47972/railway?useSSL=false&serverTimezone=UTC";
     private static final String DEFAULT_USER = "root";
     private static final String DEFAULT_PASS = "VlBexZnEeabMdJXjwqTqIpKQtIbLgilu";
 
