@@ -13,20 +13,26 @@ public class DBUtil {
     public static Connection getConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+
             String url = System.getenv("DB_URL");
             String user = System.getenv("DB_USER");
             String pass = System.getenv("DB_PASS");
+
             if (url == null || url.isEmpty()) url = DEFAULT_URL;
             if (user == null || user.isEmpty()) user = DEFAULT_USER;
             if (pass == null || pass.isEmpty()) pass = DEFAULT_PASS;
+
             Connection conn = DriverManager.getConnection(url, user, pass);
-            System.out.println("✅ Kết nối database thành công!");
+
+            if (conn != null) {
+                System.out.println("✅ Connected to database!");
+            } else {
+                System.out.println("❌ Connection failed!");
+            }
+
             return conn;
-        } catch (ClassNotFoundException e) {
-            System.err.println("❌ Không tìm thấy MySQL Driver!");
-            e.printStackTrace();
-        } catch (SQLException e) {
-            System.err.println("❌ Lỗi khi kết nối database!");
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
