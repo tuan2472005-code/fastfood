@@ -22,7 +22,7 @@ import com.fastfood.model.Product;
 import com.fastfood.model.User;
 import com.fastfood.model.Voucher;
 
-@WebServlet("/checkout")
+
 public class CheckoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
