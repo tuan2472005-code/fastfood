@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DBUtil {
     private static final String DEFAULT_URL =
-        "jdbc:mysql://localhost:3306/fastfood_db?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh";
+        "jdbc:mysql://VlBexZnEeabMdJXjwqTqIpKQtIbLgilu@crossover.proxy.rlwy.net:47972/railway;
     private static final String DEFAULT_USER = "root";
-    private static final String DEFAULT_PASS = "root";
+    private static final String DEFAULT_PASS = "VlBexZnEeabMdJXjwqTqIpKQtIbLgilu";
 
     // ✅ Hàm tạo kết nối
     public static Connection getConnection() {
