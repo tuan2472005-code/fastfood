@@ -1,0 +1,116 @@
+/* Main CSS file for Fastfood application */
+
+/* Sidebar styles */
+.sidebar {
+	min-height: 100vh;
+	background-color: #343a40;
+	color: white;
+}
+
+.sidebar a {
+	color: rgba(255, 255, 255, 0.8);
+	padding: 10px 15px;
+	display: block;
+	text-decoration: none;
+	transition: all 0.3s ease;
+}
+
+.sidebar a:hover {
+	color: white;
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar a.active {
+	background-color: rgba(255, 255, 255, 0.2);
+	color: white;
+}
+
+/* Dashboard styles */
+.content {
+	padding: 20px;
+}
+
+.dashboard-card {
+	border-radius: 5px;
+	padding: 20px;
+	margin-bottom: 20px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Table styles */
+.table-responsive {
+	overflow-x: auto;
+}
+
+.table th {
+	background-color: #f8f9fa;
+}
+
+/* Status badges */
+.badge-pending {
+	background-color: #ffc107;
+	color: #212529;
+}
+
+.badge-processing {
+	background-color: #17a2b8;
+	color: white;
+}
+
+.badge-completed {
+	background-color: #28a745;
+	color: white;
+}
+
+.badge-cancelled {
+	background-color: #dc3545;
+	color: white;
+}
+
+/* Form styles */
+.form-container {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+/* Button styles */
+.btn-action {
+	margin-right: 5px;
+}
+
+/* Logout button specific style */
+.logout-btn {
+	margin-top: auto;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	padding-top: 15px;
+	margin-top: 15px;
+}
+
+.logout-btn form {
+	margin: 0;
+	padding: 0;
+}
+
+.logout-btn button {
+	background: none;
+	border: none;
+	color: rgba(255, 255, 255, 0.8);
+	padding: 10px 15px;
+	display: block;
+	width: 100%;
+	text-align: left;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.logout-btn button:hover {
+	color: white;
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive adjustments */
+@media ( max-width : 768px) {
+	.sidebar {
+		min-height: auto;
+	}
+}

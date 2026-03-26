@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test UTF-8 Encoding</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 20px;
+	line-height: 1.6;
+}
+
+.test-section {
+	margin: 20px 0;
+	padding: 15px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+.correct {
+	background-color: #d4edda;
+	border-color: #c3e6cb;
+}
+
+.incorrect {
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+}
+</style>
+</head>
+<body>
+	<h1>Test UTF-8 Encoding - Kiểm tra mã hóa UTF-8</h1>
+
+	<div class="test-section correct">
+		<h2>Tiếng Việt có dấu (Vietnamese with diacritics):</h2>
+		<p>Xin chào! Đây là test UTF-8 encoding.</p>
+		<p>Các ký tự đặc biệt: à á ả ã ạ â ầ ấ ẩ ẫ ậ ă ằ ắ ẳ ẵ ặ</p>
+		<p>Chữ hoa: À Á Ả Ã Ạ Â Ầ Ấ Ẩ Ẫ Ậ Ă Ằ Ắ Ẳ Ẵ Ặ</p>
+		<p>Các ký tự khác: è é ẻ ẽ ẹ ê ề ế ể ễ ệ</p>
+		<p>Chữ ô, ơ, ư: ô ồ ố ổ ỗ ộ ơ ờ ớ ở ỡ ợ ư ừ ứ ử ữ ự</p>
+		<p>Chữ y: ỳ ý ỷ ỹ ỵ</p>
+	</div>
+
+	<div class="test-section">
+		<h2>Tên sản phẩm mẫu:</h2>
+		<ul>
+			<li>Burger Bò Phô Mai</li>
+			<li>Burger Gà Cay</li>
+			<li>Pizza Hải Sản</li>
+			<li>Pizza Thịt Xông Khói</li>
+			<li>Gà Rán Sốt Cay</li>
+			<li>Gà Rán Khoai Tây</li>
+			<li>Coca Cola</li>
+			<li>Trà Đào</li>
+		</ul>
+	</div>
+
+	<div class="test-section">
+		<h2>Ký tự đặc biệt khác:</h2>
+		<p>Ký hiệu tiền tệ: ₫ (VND)</p>
+		<p>Emoji: 🍔 🍕 🍟 🥤</p>
+		<p>Ký tự đặc biệt: © ® ™ € £ ¥</p>
+	</div>
+
+	<div class="test-section">
+		<h2>Hướng dẫn kiểm tra:</h2>
+		<p>
+			<strong>Nếu bạn thấy:</strong>
+		</p>
+		<ul>
+			<li>✅ Tất cả ký tự tiếng Việt hiển thị đúng → UTF-8 hoạt động
+				tốt</li>
+			<li>❌ Ký tự bị lỗi (???, ã, Ã¡, v.v.) → Có vấn đề về UTF-8</li>
+		</ul>
+	</div>
+
+	<script>
+        // Test JavaScript với UTF-8
+        console.log("Test UTF-8 trong JavaScript:");
+        console.log("Tiếng Việt: Xin chào các bạn!");
+        console.log("Ký tự đặc biệt: àáảãạâầấẩẫậăằắẳẵặ");
+        
+        // Hiển thị thông tin encoding
+        document.addEventListener('DOMContentLoaded', function() {
+            const info = document.createElement('div');
+            info.className = 'test-section';
+            info.innerHTML = `
+                <h2>Thông tin kỹ thuật:</h2>
+                <p><strong>Document charset:</strong> ${document.characterSet}</p>
+                <p><strong>Content type:</strong> ${document.contentType}</p>
+                <p><strong>User agent:</strong> ${navigator.userAgent}</p>
+            `;
+            document.body.appendChild(info);
+        });
+    </script>
+</body>
+</html>

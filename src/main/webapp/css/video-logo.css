@@ -1,0 +1,194 @@
+/* Video Logo Optimization CSS */
+
+/* Base video logo styles */
+.video-logo {
+	object-fit: contain;
+	max-width: 100%;
+	height: auto;
+	border-radius: 4px;
+	transition: all 0.3s ease;
+}
+
+/* Navbar video logo */
+.navbar-brand video {
+	height: 30px;
+	margin-right: 10px;
+	object-fit: contain;
+	border-radius: 4px;
+}
+
+/* Admin sidebar video logo */
+.admin-logo video {
+	height: 40px;
+	margin-right: 10px;
+	object-fit: contain;
+	border-radius: 4px;
+}
+
+/* Login page video logo */
+.login-container .logo video {
+	height: 60px;
+	margin-bottom: 10px;
+	object-fit: contain;
+	border-radius: 8px;
+}
+
+/* Register page video logo */
+.register-header video {
+	height: 50px;
+	margin-bottom: 15px;
+	object-fit: contain;
+	border-radius: 8px;
+}
+
+/* Admin header video logo */
+.sidebar h4 video {
+	height: 30px;
+	margin-right: 10px;
+	object-fit: contain;
+	border-radius: 4px;
+}
+
+/* Responsive design for mobile devices */
+@media ( max-width : 768px) {
+	.navbar-brand video {
+		height: 25px;
+		margin-right: 8px;
+	}
+	.admin-logo video {
+		height: 35px;
+		margin-right: 8px;
+	}
+	.login-container .logo video {
+		height: 50px;
+		margin-bottom: 8px;
+	}
+	.register-header video {
+		height: 40px;
+		margin-bottom: 12px;
+	}
+	.sidebar h4 video {
+		height: 25px;
+		margin-right: 8px;
+	}
+}
+
+/* Responsive design for small mobile devices */
+@media ( max-width : 480px) {
+	.navbar-brand video {
+		height: 20px;
+		margin-right: 6px;
+	}
+	.admin-logo video {
+		height: 30px;
+		margin-right: 6px;
+	}
+	.login-container .logo video {
+		height: 40px;
+		margin-bottom: 6px;
+	}
+	.register-header video {
+		height: 35px;
+		margin-bottom: 10px;
+	}
+	.sidebar h4 video {
+		height: 20px;
+		margin-right: 6px;
+	}
+}
+
+/* Hover effects for interactive elements */
+.navbar-brand:hover video, .admin-logo:hover video {
+	transform: scale(1.05);
+	filter: brightness(1.1);
+}
+
+/* Loading state for video */
+video[src*="logofastfood.mp4"] {
+	background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+	background-size: 400% 400%;
+	animation: loading-gradient 2s ease infinite;
+}
+
+@
+keyframes loading-gradient { 0% {
+	background-position: 0% 50%;
+}
+
+50
+
+
+%
+{
+background-position
+
+
+:
+
+
+100
+%
+
+
+50
+%;
+
+
+}
+100
+
+
+%
+{
+background-position
+
+
+:
+
+
+0
+%
+
+
+50
+%;
+
+
+}
+}
+
+/* Fallback for browsers that don't support video */
+video[src*="logofastfood.mp4"]::after {
+	content: "🍔";
+	font-size: inherit;
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	line-height: inherit;
+}
+
+/* Performance optimization */
+video[src*="logofastfood.mp4"] {
+	will-change: transform;
+	backface-visibility: hidden;
+	perspective: 1000px;
+}
+
+/* Accessibility improvements */
+@media ( prefers-reduced-motion : reduce) {
+	video[src*="logofastfood.mp4"] {
+		animation: none;
+	}
+	.navbar-brand:hover video, .admin-logo:hover video {
+		transform: none;
+	}
+}
+
+/* High contrast mode support */
+@media ( prefers-contrast : high) {
+	video[src*="logofastfood.mp4"] {
+		filter: contrast(1.2);
+		border: 1px solid currentColor;
+	}
+}
