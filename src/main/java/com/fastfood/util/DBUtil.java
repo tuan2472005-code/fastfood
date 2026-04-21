@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBUtil {
     private static final String DEFAULT_URL = "jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require";
     private static final String DEFAULT_USER = "postgres.cqockwjguuuckuclwuxk";
-    private static final String DEFAULT_PASS = "Tuan0966035418a";
+    private static final String DEFAULT_PASS = "Tuan0966035418@";
 
     public static Connection getConnection() {
         try {
