@@ -11,7 +11,7 @@ public class DBUtil {
     // ✅ Hàm tạo kết nối
     public static Connection getConnection() {
         try {
-            Class.forName("com.postgresql.cj.jdbc.Driver");
+            Class.forName("com.postgresql.Driver");
 
             String url = System.getenv("DB_URL");
             String user = System.getenv("DB_USER");
