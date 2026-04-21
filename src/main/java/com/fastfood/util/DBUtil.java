@@ -5,13 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBUtil {
-    private static final String url = "jdbc:postgresql://db.cqockwjguuuckuclwuxk.supabase.co:5432/postgres";
+    private static final String url = "jdbc:postgresql://db.cqockwjguuuckuclwuxk.supabase.co:5432/postgres?sslmode=require";
     private static final String user = "postgres";
     private static final String password = "Tuan0966035418@";
     // ✅ Hàm tạo kết nối
     public static Connection getConnection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.postgresql.cj.jdbc.Driver");
 
             String url = System.getenv("DB_URL");
             String user = System.getenv("DB_USER");
