@@ -5,13 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBUtil {
-    private static final String url = "jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require";
-    private static final String user = "postgres.cqockwjguuuckuclwuxk";
-    private static final String password = "Tuan0966035418@";
-    // ✅ Hàm tạo kết nối
+    private static final String DEFAULT_URL = "jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require";
+    private static final String DEFAULT_USER = "postgres.cqockwjguuuckuclwuxk";
+    private static final String DEFAULT_PASS = "Tuan0966035418a";
+
     public static Connection getConnection() {
         try {
-            Class.forName("com.postgresql.Driver");
+            Class.forName("org.postgresql.Driver");
 
             String url = System.getenv("DB_URL");
             String user = System.getenv("DB_USER");
@@ -24,26 +24,26 @@ public class DBUtil {
             Connection conn = DriverManager.getConnection(url, user, pass);
 
             if (conn != null) {
-                System.out.println("✅ Connected to database!");
+                System.out.println("Connected to database!");
             } else {
-                System.out.println("❌ Connection failed!");
+                System.out.println("Connection failed!");
             }
 
             return conn;
 
         } catch (Exception e) {
+            System.out.println("Loi khi ket noi database!");
             e.printStackTrace();
         }
         return null;
     }
 
-    // ✅ Kiểm tra nhanh kết nối
     public static void main(String[] args) {
         Connection con = getConnection();
         if (con != null) {
-            System.out.println("✅ Database sẵn sàng!");
+            System.out.println("Database san sang!");
         } else {
-            System.out.println("❌ Không thể kết nối tới database!");
+            System.out.println("Khong the ket noi toi database!");
         }
     }
 }
