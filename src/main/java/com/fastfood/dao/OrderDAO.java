@@ -30,7 +30,6 @@ public class OrderDAO {
         try (Connection conn = DBUtil.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql));{
-            System.out.println("SQL: " + sql);
             while (rs.next()) {
                 Order order = mapResultSetToOrderSimple(rs);
                 // Set customer name from JOIN
@@ -316,7 +315,9 @@ public class OrderDAO {
         List<Object[]> monthlyRevenue = new ArrayList<>();
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             ResultSet rs = stmt.executeQuery())
+            {
+            System.out.println("SQL: " + sql);
             
             while (rs.next()) {
                 Object[] data = new Object[3];
