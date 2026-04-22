@@ -317,8 +317,6 @@ public class OrderDAO {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery())
             {
-            System.out.println("SQL: " + sql);
-            
             while (rs.next()) {
                 Object[] data = new Object[3];
                 data[0] = rs.getInt("month");
