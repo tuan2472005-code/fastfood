@@ -305,10 +305,14 @@ public class OrderDAO {
     }
     
     public List<Object[]> getMonthlyRevenue() throws SQLException {
-        String sql = "SELECT MONTH(ngay_tao) as month, YEAR(ngay_tao) as year, SUM(tong_tien) as revenue " +
-                    "FROM don_hang WHERE trang_thai = 'DA_GIAO' " +
-                    "GROUP BY YEAR(ngay_tao), MONTH(ngay_tao) " +
-                    "ORDER BY year DESC, month DESC LIMIT 12";
+    String sql = "SELECT EXTRACT(MONTH FROM ngay_tao) AS month, " +
+                 "EXTRACT(YEAR FROM ngay_tao) AS year, " +
+                 "SUM(tong_tien) AS revenue " +
+                 "FROM don_hang " +
+                 "WHERE trang_thai = 'DA_GIAO' " +
+                 "GROUP BY year, month " +
+                 "ORDER BY year DESC, month DESC " +
+                 "LIMIT 12";
         
         List<Object[]> monthlyRevenue = new ArrayList<>();
         try (Connection conn = DBUtil.getConnection();
