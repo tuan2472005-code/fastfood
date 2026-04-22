@@ -29,7 +29,7 @@ public class OrderDAO {
         
         try (Connection conn = DBUtil.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql));{
+             ResultSet rs = stmt.executeQuery(sql)){
             while (rs.next()) {
                 Order order = mapResultSetToOrderSimple(rs);
                 // Set customer name from JOIN
