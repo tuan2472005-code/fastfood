@@ -313,20 +313,28 @@ public class OrderDAO {
              "LIMIT 12";
         
         List<Object[]> monthlyRevenue = new ArrayList<>();
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery())
-            {
-                System.out.println(sql);
-            while (rs.next()) {
-                Object[] data = new Object[3];
-                data[0] = rs.getInt("month");
-                data[1] = rs.getInt("year");
-                data[2] = rs.getBigDecimal("revenue");
-                monthlyRevenue.add(data);
-            }
-        }
-        return monthlyRevenue;
+
+try (Connection conn = DBUtil.getConnection();
+     PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+    // 👇 in ra TRƯỚC khi chạy query
+    System.out.println("SQL đang chạy: " + sql);
+
+    ResultSet rs = stmt.executeQuery();
+
+    while (rs.next()) {
+        Object[] data = new Object[3];
+        data[0] = rs.getInt("month");
+        data[1] = rs.getInt("year");
+        data[2] = rs.getBigDecimal("revenue");
+        monthlyRevenue.add(data);
+    }
+
+} catch (Exception e) {
+    e.printStackTrace(); // 👈 bắt buộc phải có
+}
+
+return monthlyRevenue;
     }
     
     public List<Object[]> getTopSellingProducts() throws SQLException {
