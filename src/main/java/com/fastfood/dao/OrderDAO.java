@@ -28,9 +28,10 @@ public class OrderDAO {
                     "ORDER BY dh.ngay_tao DESC";
         
         try (Connection conn = DBUtil.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
+             Statement stmt = conn.createStatement() {
+             System.out.println(sql);
+             ResultSet rs = stmt.executeQuery(sql));
+             
             while (rs.next()) {
                 Order order = mapResultSetToOrderSimple(rs);
                 // Set customer name from JOIN
@@ -40,7 +41,6 @@ public class OrderDAO {
         }
         
         return orders;
-        System.out.println(sql);
     }
     
     public List<Order> getOrdersByUserId(int userId) throws SQLException {
