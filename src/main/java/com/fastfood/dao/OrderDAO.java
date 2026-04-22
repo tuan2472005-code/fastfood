@@ -29,8 +29,7 @@ public class OrderDAO {
         
         try (Connection conn = DBUtil.getConnection();
              Statement stmt = conn.createStatement() 
-             ResultSet rs = stmt.executeQuery(sql));
-             {
+             ResultSet rs = stmt.executeQuery(sql));{
               System.out.println(sql);
             while (rs.next()) {
                 Order order = mapResultSetToOrderSimple(rs);
