@@ -12,7 +12,7 @@ public class VoucherDAO {
     
     // Tìm voucher theo mã
     public Voucher findByCode(String code) {
-        String sql = "SELECT * FROM vouchers WHERE code = ? AND is_active = 1";
+        String sql = "SELECT * FROM vouchers WHERE code = ? AND is_active = TRUE";
         
         System.out.println("DEBUG: Searching for voucher with code: " + code);
         System.out.println("DEBUG: SQL query: " + sql);
