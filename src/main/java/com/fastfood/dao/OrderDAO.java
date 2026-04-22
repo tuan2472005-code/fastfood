@@ -40,6 +40,7 @@ public class OrderDAO {
         }
         
         return orders;
+        System.out.println(sql);
     }
     
     public List<Order> getOrdersByUserId(int userId) throws SQLException {
@@ -306,13 +307,13 @@ public class OrderDAO {
     
     public List<Object[]> getMonthlyRevenue() throws SQLException {
     String sql = "SELECT EXTRACT(MONTH FROM ngay_tao) AS month, " +
-                 "EXTRACT(YEAR FROM ngay_tao) AS year, " +
-                 "SUM(tong_tien) AS revenue " +
-                 "FROM don_hang " +
-                 "WHERE trang_thai = 'DA_GIAO' " +
-                 "GROUP BY year, month " +
-                 "ORDER BY year DESC, month DESC " +
-                 "LIMIT 12";
+             "EXTRACT(YEAR FROM ngay_tao) AS year, " +
+             "SUM(tong_tien) AS revenue " +
+             "FROM don_hang " +
+             "WHERE trang_thai = 'DA_GIAO' " +
+             "GROUP BY EXTRACT(YEAR FROM ngay_tao), EXTRACT(MONTH FROM ngay_tao) " +
+             "ORDER BY year DESC, month DESC " +
+             "LIMIT 12";
         
         List<Object[]> monthlyRevenue = new ArrayList<>();
         try (Connection conn = DBUtil.getConnection();
@@ -338,6 +339,7 @@ public class OrderDAO {
                     "WHERE o.trang_thai = 'DA_GIAO' " +
                     "GROUP BY p.id, p.ten " +
                     "ORDER BY total_sold DESC LIMIT 10";
+        
         
         List<Object[]> topProducts = new ArrayList<>();
         try (Connection conn = DBUtil.getConnection();
