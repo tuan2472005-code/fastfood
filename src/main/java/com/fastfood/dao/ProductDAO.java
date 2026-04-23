@@ -139,7 +139,7 @@ public class ProductDAO {
     }
     
     public boolean addProduct(Product product) {
-        String sql = "INSERT INTO san_pham (ten, mo_ta, gia, gia_khuyen_mai, hinh_anh, danh_muc_id, ton_kho, noi_bat, trang_thai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO san_pham (ten, mo_ta, gia, gia_khuyen_mai, hinh_anh, danh_muc_id, ton_kho, noi_bat, trang_thai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?::product_status_enum)";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -171,7 +171,7 @@ public class ProductDAO {
     }
     
     public boolean updateProduct(Product product) {
-        String sql = "UPDATE san_pham SET ten = ?, mo_ta = ?, gia = ?, gia_khuyen_mai = ?, hinh_anh = ?, danh_muc_id = ?, ton_kho = ?, noi_bat = ?, trang_thai = ? WHERE id = ?";
+        String sql = "UPDATE san_pham SET ten = ?, mo_ta = ?, gia = ?, gia_khuyen_mai = ?, hinh_anh = ?, danh_muc_id = ?, ton_kho = ?, noi_bat = ?, trang_thai = ?::product_status_enum WHERE id = ?";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
