@@ -39,7 +39,7 @@ public class VoucherDAO {
     
     // Tìm voucher theo mã và loại
     public Voucher findByCodeAndType(String code, String voucherType) {
-        String sql = "SELECT * FROM vouchers WHERE code = ? AND voucher_type = ? AND is_active = 1";
+        String sql = "SELECT * FROM vouchers WHERE code = ? AND voucher_type = ? AND is_active = TRUE";
         
         System.out.println("DEBUG: Searching for voucher with code: " + code + " and type: " + voucherType);
         
@@ -104,7 +104,7 @@ public class VoucherDAO {
     public boolean save(Voucher voucher) {
         String sql = "INSERT INTO vouchers (code, name, discount_type, discount_value, " +
                     "min_order_amount, max_discount_amount, usage_limit, start_date, end_date, is_active, voucher_type) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?::discount_type_enum, ?, ?, ?, ?, ?, ?, ?, ?::voucher_type_enum)";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -138,9 +138,9 @@ public class VoucherDAO {
     
     // Cập nhật voucher
     public boolean update(Voucher voucher) {
-        String sql = "UPDATE vouchers SET name = ?, discount_type = ?, " +
+        String sql = "UPDATE vouchers SET name = ?, discount_type = ?::discount_type_enum, " +
                     "discount_value = ?, min_order_amount = ?, max_discount_amount = ?, " +
-                    "usage_limit = ?, start_date = ?, end_date = ?, is_active = ?, voucher_type = ?, " +
+                    "usage_limit = ?, start_date = ?, end_date = ?, is_active = ?, voucher_type = ?::voucher_type_enum, " +
                     "updated_at = CURRENT_TIMESTAMP WHERE id = ?";
         
         try (Connection conn = DBUtil.getConnection();
