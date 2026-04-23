@@ -47,7 +47,7 @@ public class UserDAO {
     }
     
     public boolean registerUser(User user) {
-        String sql = "INSERT INTO nguoi_dung (ten_dang_nhap, mat_khau, ho_ten, email, so_dien_thoai, dia_chi, vai_tro) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO nguoi_dung (ten_dang_nhap, mat_khau, ho_ten, email, so_dien_thoai, dia_chi, vai_tro) VALUES (?, ?, ?, ?, ?, ?, ?::user_role_enum)";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -192,7 +192,7 @@ public class UserDAO {
     }
     
     public boolean updateUser(User user) {
-        String sql = "UPDATE nguoi_dung SET ten_dang_nhap = ?, mat_khau = ?, ho_ten = ?, email = ?, so_dien_thoai = ?, dia_chi = ?, vai_tro = ? WHERE id = ?";
+        String sql = "UPDATE nguoi_dung SET ten_dang_nhap = ?, mat_khau = ?, ho_ten = ?, email = ?, so_dien_thoai = ?, dia_chi = ?, vai_tro = ?::user_role_enum WHERE id = ?";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
