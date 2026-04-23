@@ -29,7 +29,8 @@ public class OrderDAO {
         
         try (Connection conn = DBUtil.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)){
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
             while (rs.next()) {
                 Order order = mapResultSetToOrderSimple(rs);
                 // Set customer name from JOIN
@@ -37,6 +38,7 @@ public class OrderDAO {
                 orders.add(order);
             }
         }
+        
         return orders;
     }
     
@@ -303,38 +305,27 @@ public class OrderDAO {
     }
     
     public List<Object[]> getMonthlyRevenue() throws SQLException {
-    String sql = "SELECT EXTRACT(MONTH FROM ngay_tao) AS month, " +
-             "EXTRACT(YEAR FROM ngay_tao) AS year, " +
-             "SUM(tong_tien) AS revenue " +
-             "FROM don_hang " +
-             "WHERE trang_thai = 'DA_GIAO' " +
-             "GROUP BY EXTRACT(YEAR FROM ngay_tao), EXTRACT(MONTH FROM ngay_tao) " +
-             "ORDER BY year DESC, month DESC " +
-             "LIMIT 12";
+        String sql = "SELECT CAST(EXTRACT(MONTH FROM ngay_tao) AS INTEGER) as month, " +
+                    "CAST(EXTRACT(YEAR FROM ngay_tao) AS INTEGER) as year, " +
+                    "SUM(tong_tien) as revenue " +
+                    "FROM don_hang WHERE trang_thai = 'DA_GIAO' " +
+                    "GROUP BY year, month " +
+                    "ORDER BY year DESC, month DESC LIMIT 12";
         
-        List<Object[]> monthlyRevenue = new ArrayList<>();
-
-try (Connection conn = DBUtil.getConnection();
-     PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-    // 👇 in ra TRƯỚC khi chạy query
-    System.out.println("SQL đang chạy: " + sql);
-
-    ResultSet rs = stmt.executeQuery();
-
-    while (rs.next()) {
-        Object[] data = new Object[3];
-        data[0] = rs.getInt("month");
-        data[1] = rs.getInt("year");
-        data[2] = rs.getBigDecimal("revenue");
-        monthlyRevenue.add(data);
-    }
-
-} catch (Exception e) {
-    e.printStackTrace(); // 👈 bắt buộc phải có
-}
-
-return monthlyRevenue;
+        List<Object[]> monthlyRevenue = new ArrayList<>();  
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                Object[] data = new Object[3];
+                data[0] = rs.getInt("month");
+                data[1] = rs.getInt("year");
+                data[2] = rs.getBigDecimal("revenue");
+                monthlyRevenue.add(data);
+            }
+        }
+        return monthlyRevenue;
     }
     
     public List<Object[]> getTopSellingProducts() throws SQLException {
@@ -345,7 +336,6 @@ return monthlyRevenue;
                     "WHERE o.trang_thai = 'DA_GIAO' " +
                     "GROUP BY p.id, p.ten " +
                     "ORDER BY total_sold DESC LIMIT 10";
-        
         
         List<Object[]> topProducts = new ArrayList<>();
         try (Connection conn = DBUtil.getConnection();
