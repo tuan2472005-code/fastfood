@@ -45,7 +45,7 @@ public class ReviewDAO {
     }
     
     public boolean addReview(Review review) {
-        String sql = "INSERT INTO danh_gia (san_pham_id, nguoi_dung_id, ho_ten, email, rating, binh_luan, trang_thai) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO danh_gia (san_pham_id, nguoi_dung_id, ho_ten, email, rating, binh_luan, trang_thai) VALUES (?, ?, ?, ?, ?, ?, ?::review_status_enum)";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
