@@ -21,7 +21,7 @@ public class ProductDAO {
                     "FROM san_pham sp " +
                     "LEFT JOIN danh_muc dm ON sp.danh_muc_id = dm.id " +
                     "LEFT JOIN danh_gia dg ON sp.id = dg.san_pham_id AND dg.trang_thai = 'approved' " +
-                    "GROUP BY sp.id " +
+                    "GROUP BY sp.id, dm.ten " +
                     "ORDER BY sp.id ASC";
         
         try (Connection conn = DBUtil.getConnection();
@@ -103,7 +103,7 @@ public class ProductDAO {
                     "LEFT JOIN danh_muc dm ON sp.danh_muc_id = dm.id " +
                     "LEFT JOIN danh_gia dg ON sp.id = dg.san_pham_id AND dg.trang_thai = 'approved' " +
                     "WHERE sp.id = ? " +
-                    "GROUP BY sp.id";
+                    "GROUP BY sp.id, dm.ten";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -228,8 +228,8 @@ public class ProductDAO {
                     "FROM san_pham sp " +
                     "LEFT JOIN danh_muc dm ON sp.danh_muc_id = dm.id " +
                     "LEFT JOIN danh_gia dg ON sp.id = dg.san_pham_id AND dg.trang_thai = 'approved' " +
-                    "WHERE sp.trang_thai = 'active' AND sp.noi_bat = TRUE " +
-                    "GROUP BY sp.id " +
+                    "WHERE sp.trang_thai = 'active' AND sp.noi_bat = 1 " +
+                    "GROUP BY sp.id, dm.ten " +
                     "ORDER BY sp.ngay_tao DESC LIMIT 4";
         
         try (Connection conn = DBUtil.getConnection();
