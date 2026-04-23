@@ -138,7 +138,7 @@ public class OrderDAO {
         String sql = "INSERT INTO don_hang (nguoi_dung_id, tong_tien, phi_ship, trang_thai, phuong_thuc_thanh_toan, dia_chi_giao_hang, " +
                      "so_dien_thoai_giao_hang, ten_nguoi_nhan, ghi_chu, voucher_id, voucher_code, discount_amount, " +
                      "shipping_voucher_id, shipping_voucher_code, shipping_discount_amount, ngay_tao, ngay_cap_nhat) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+                     "VALUES (?, ?, ?, ?::order_status_enum, ?::payment_method_enum, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -198,7 +198,7 @@ public class OrderDAO {
     }
     
     public boolean updateOrderStatus(int orderId, String status) throws SQLException {
-        String sql = "UPDATE don_hang SET trang_thai = ?, ngay_cap_nhat = NOW() WHERE id = ?";
+        String sql = "UPDATE don_hang SET trang_thai = ?::order_status_enum, ngay_cap_nhat = NOW() WHERE id = ?";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
