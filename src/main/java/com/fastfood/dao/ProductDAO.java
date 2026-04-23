@@ -228,7 +228,7 @@ public class ProductDAO {
                     "FROM san_pham sp " +
                     "LEFT JOIN danh_muc dm ON sp.danh_muc_id = dm.id " +
                     "LEFT JOIN danh_gia dg ON sp.id = dg.san_pham_id AND dg.trang_thai = 'approved' " +
-                    "WHERE sp.trang_thai = 'active' AND sp.noi_bat = 1 " +
+                    "WHERE sp.trang_thai = 'active' AND sp.noi_bat = TRUE " +
                     "GROUP BY sp.id, dm.ten " +
                     "ORDER BY sp.ngay_tao DESC LIMIT 4";
         
