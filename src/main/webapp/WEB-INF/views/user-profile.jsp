@@ -61,7 +61,7 @@ body {
 }
 
 .btn-primary:hover {
-	background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+	background: linear-gradient(135deg, #e55a2b 100%);
 }
 
 .info-card {
