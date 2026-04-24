@@ -207,13 +207,14 @@
 }
 
 .btn-primary {
-	background-color: #ff6b35;
-	border-color: #ff6b35;
+	background: linear-gradient(135deg, #ff6b35 100%);
+	border: none;
+	border-radius: 10px;
+	padding: 12px 30px;
+	font-weight: 600;
 }
-
 .btn-primary:hover {
-	background-color: #e55a2b;
-	border-color: #e55a2b;
+	background: linear-gradient(135deg, #e55a2b 100%);
 }
 
 /* Banner Carousel Styles */
@@ -809,8 +810,7 @@ body {
                                                 style="width: 32px; height: 32px; object-fit: cover;">
                                         </c:when>
                                         <c:otherwise>
-                                            <i class="fas fa-user-circle me-2 avatar-icon"
-                                                style="font-size: 24px;"></i>
+                                            <i class="fas fa-user-circle me-2 avatar-icon" style="font-size: 24px;"></i>
                                         </c:otherwise>
                                     </c:choose>
                                     <span style="font-weight: 500;">${sessionScope.user.fullName}</span>
@@ -1241,7 +1241,7 @@ body {
                         <div class="service-icon"><i class="fas fa-comments"></i></div>
                         <h4>Trò chuyện trực tuyến</h4>
                         <p class="text-muted">Kết nối ngay với CSKH</p>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#supportModal">Mở chat</button>
+                        <button class=" btn btn-primary" data-bs-toggle="modal" data-bs-target="#supportModal">Mở chat</button>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
