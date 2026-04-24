@@ -36,8 +36,7 @@
 }
 
 .btn-primary:hover {
-    background-color: #e55a2b;
-    border-color: #e55a2b;
+	background: linear-gradient(135deg, #e55a2b 100%);
 }
 /* Notifications */
 .notif-btn{position:relative}
