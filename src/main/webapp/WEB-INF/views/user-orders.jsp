@@ -124,12 +124,6 @@ body {
 	color: #6c757d;
 }
 
-/* Avatar Icon Styles */
-.avatar-icon {
-	color: white !important;
-	filter: drop-shadow(0 0 2px white)
-		drop-shadow(0 0 4px rgba(0, 123, 255, 0.8)) !important;
-}
 
 /* Enhanced Navbar Styles */
 .navbar {
@@ -178,7 +172,6 @@ body {
 .navbar-nav .nav-link:active {
 	background-color: rgba(255, 255, 255, 0.2) !important;
 }
-
 .btn-outline-light {
     border-radius: 25px !important;
     padding: 8px 20px !important;
@@ -215,10 +208,15 @@ body {
 .avatar-image {
 	border: 2px solid white !important;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-	width: 32px !important;
-	height: 32px !important;
-	border-radius: 50% !important;
-	object-fit: cover !important;
+}
+
+.avatar-icon {
+	color: white !important;
+	filter: drop-shadow(0 0 2px white)
+		drop-shadow(0 0 4px rgba(0, 123, 255, 0.8)) !important;
+}
+.btn-primary:hover {
+	background: linear-gradient(135deg, #e55a2b 100%);
 }
 
 @media ( max-width : 991px) {
@@ -289,7 +287,7 @@ body {
                 <div class="d-none d-lg-flex align-items-center ms-auto">
                     <c:set var="cartCount" value="${sessionScope.cartItems != null ? fn:length(sessionScope.cartItems) : 0}" />
                     <a href="${pageContext.request.contextPath}/cart/view"
-                        class="btn btn-outline-light me-3 notif-btn"> 
+                        class="btn btn-outline-light me-3 notif-btn">
                         <i class="fas fa-shopping-cart"></i>
                         <c:if test="${cartCount > 0}"><span class="notif-badge" data-total="${cartCount}">${cartCount}</span></c:if>
                     </a>
@@ -314,22 +312,29 @@ body {
                         </ul>
                     </div>
                     <c:choose>
-                        <c:when test="${not empty sessionScope.user}">
+                        <c:when test="${empty sessionScope.user}">
+                            <a href="${pageContext.request.contextPath}/login"
+                                class="btn btn-outline-light ms-2"> <i class="fas fa-user"></i>
+                                Đăng nhập
+                            </a>
+                        </c:when>
+                        <c:otherwise>
                             <div class="dropdown ms-2">
-                                <button class="btn user-avatar-btn dropdown-toggle"
-                                    type="button" id="userDropdown" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+                                <button
+                                    class="btn btn-primary dropdown-toggle d-flex align-items-center user-avatar-btn"
+                                    type="button" id="userDropdown" data-bs-toggle="dropdown">
                                     <c:choose>
                                         <c:when test="${not empty sessionScope.user.avatar}">
                                             <img
                                                 src="${pageContext.request.contextPath}/${sessionScope.user.avatar}"
-                                                alt="Avatar" class="avatar-image">
+                                                alt="Avatar" class="rounded-circle me-2 avatar-image"
+                                                style="width: 32px; height: 32px; object-fit: cover;">
                                         </c:when>
                                         <c:otherwise>
-                                            <i class="fas fa-user-circle avatar-icon"></i>
+                                            <i class="fas fa-user-circle me-2 avatar-icon" style="font-size: 24px;"></i>
                                         </c:otherwise>
                                     </c:choose>
-                                    <span class="ms-2">${sessionScope.user.fullName}</span>
+                                    <span style="font-weight: 500;">${sessionScope.user.fullName}</span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item"
@@ -347,12 +352,6 @@ body {
                                     </a></li>
                                 </ul>
                             </div>
-                        </c:when>
-                        <c:otherwise>
-                            <a href="${pageContext.request.contextPath}/login"
-                                class="btn btn-outline-light ms-2"> <i class="fas fa-sign-in-alt"></i>
-                                Đăng nhập
-                            </a>
                         </c:otherwise>
                     </c:choose>
                 </div>
