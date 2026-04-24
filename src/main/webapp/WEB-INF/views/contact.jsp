@@ -4,6 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,13 +49,15 @@
 }
 
 .btn-primary {
-	background-color: #ff6b35;
-	border-color: #ff6b35;
+	background: linear-gradient(135deg, #ff6b35 100%);
+	border: none;
+	border-radius: 10px;
+	padding: 12px 30px;
+	font-weight: 600;
 }
 
 .btn-primary:hover {
-	background-color: #e55a2b;
-	border-color: #e55a2b;
+	background: linear-gradient(135deg, #e55a2b 100%);
 }
 
 .map-container {
@@ -112,6 +115,7 @@
 }
 
 .user-avatar-btn:hover {
+	background: #e55a2b !important ;
     transform: translateY(-2px) !important;
     box-shadow: none !important;
     border-color: transparent !important;
