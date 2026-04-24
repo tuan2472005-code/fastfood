@@ -42,7 +42,7 @@ body {
 }
 
 .order-header {
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	background: linear-gradient(135deg, #ff6b35 100%);
 	color: white;
 	border-radius: 15px;
 	padding: 2rem;
@@ -105,7 +105,7 @@ body {
 }
 
 .btn-detail {
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	background: linear-gradient(135deg, #ff6b35 100%);
 	border: none;
 	border-radius: 20px;
 	padding: 8px 20px;
@@ -114,7 +114,7 @@ body {
 }
 
 .btn-detail:hover {
-	background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+	background: linear-gradient(135deg, #e55a2b 100%);
 	color: white;
 }
 
