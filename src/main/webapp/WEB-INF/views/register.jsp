@@ -180,7 +180,7 @@ to {
 	margin-bottom: 2rem;
 }
 
-.logo-section video {
+.logo-section img {
 	height: 80px;
 	margin-bottom: 1rem;
 }
@@ -411,9 +411,7 @@ to {
 
 					<div class="col-lg-7 register-right">
 						<div class="logo-section">
-							<video
-								src="${pageContext.request.contextPath}/images/logofastfood.mp4"
-								autoplay muted loop></video>
+							<img src="${pageContext.request.contextPath}/images/logofastfood.png">
 							<div class="logo-title">Fast Food</div>
 							<div class="logo-subtitle">Đăng ký tài khoản mới</div>
 						</div>
