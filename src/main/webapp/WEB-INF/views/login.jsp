@@ -6,7 +6,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Đăng nhập - Fast Food</title>
-<link rel="icon" href="<c:url value='/images/logofastfood.png'/>" type="image/png">
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -180,7 +179,7 @@ to {
 	margin-bottom: 2rem;
 }
 
-.logo-section video {
+.logo-section img {
 	height: 80px;
 	margin-bottom: 1rem;
 }
@@ -392,9 +391,7 @@ to {
 					<!-- Right Side - Login Form -->
 					<div class="col-lg-6 login-right">
 						<div class="logo-section">
-							<video
-								src="${pageContext.request.contextPath}/images/logofastfood.mp4"
-								alt="Fast Food Logo" autoplay muted loop></video>
+							<img src="${pageContext.request.contextPath}/images/logofastfood.png" alt="Fast Food Logo" >
 							<div class="logo-title">Fast Food</div>
 							<div class="logo-subtitle">Hệ thống đặt món trực tuyến</div>
 						</div>
