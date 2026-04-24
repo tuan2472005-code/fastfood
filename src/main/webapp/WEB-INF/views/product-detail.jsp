@@ -22,6 +22,15 @@
 	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 	transition: transform 0.3s ease;
 }
+.notif-btn{position:relative}
+.notif-badge{position:absolute;top:0;right:0;transform:translate(50%,-50%);background:#dc3545;color:#fff;border-radius:999px;font-size:.65rem;line-height:1;padding:2px 6px;min-width:18px;text-align:center}
+.dropdown-menu.notifications{min-width:340px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.notifications .notif-header{padding:.5rem 1rem;font-weight:600}
+.notifications .notif-item{display:flex;align-items:flex-start;gap:.5rem;padding:.5rem 1rem}
+.notifications .notif-item i{color:#ff6b35}
+.notifications .notif-empty{padding:.75rem 1rem;color:#6c757d}
+.notifications .notif-item + .notif-item{border-top:1px solid #eee}
+.notifications .notif-thumb{width:28px;height:28px;border-radius:6px;object-fit:cover;border:1px solid #eee}
 
 .product-image:hover {
 	transform: scale(1.02);
