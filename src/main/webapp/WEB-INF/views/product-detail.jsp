@@ -22,16 +22,22 @@
 	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 	transition: transform 0.3s ease;
 }
-.notif-btn{position:relative}
-.notif-badge{position:absolute;top:0;right:0;transform:translate(50%,-50%);background:#dc3545;color:#fff;border-radius:999px;font-size:.65rem;line-height:1;padding:2px 6px;min-width:18px;text-align:center}
-.dropdown-menu.notifications{min-width:340px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
-.notifications .notif-header{padding:.5rem 1rem;font-weight:600}
-.notifications .notif-item{display:flex;align-items:flex-start;gap:.5rem;padding:.5rem 1rem}
-.notifications .notif-item i{color:#ff6b35}
-.notifications .notif-empty{padding:.75rem 1rem;color:#6c757d}
-.notifications .notif-item + .notif-item{border-top:1px solid #eee}
-.notifications .notif-thumb{width:28px;height:28px;border-radius:6px;object-fit:cover;border:1px solid #eee}
-
+.bg-primary {
+        background-color: #ff6b35 !important;
+}
+    .btn-outline-primary {
+        color: #ff6b35 !important;
+        border-color: #ff6b35 !important;
+        border-radius: 4px !important;
+        padding: 8px 20px !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
+}
+    .btn-outline-primary:hover {
+        background-color: #ff6b35 !important;
+        color: white !important;
+        transform: translateY(-2px) !important;
+}
 .product-image:hover {
 	transform: scale(1.02);
 	transform-origin: center;
@@ -42,6 +48,7 @@
 	color: white;
 	padding: 60px 0;
 	margin-top: 40px;
+}
 .btn-primary {
     background-color: #ff6b35;
     border-color: #ff6b35;
@@ -56,11 +63,7 @@
 .notifications .notif-empty{padding:.75rem 1rem;color:#6c757d}
 .notifications .notif-item + .notif-item{border-top:1px solid #eee}
 .notifications .notif-thumb{width:28px;height:28px;border-radius:6px;object-fit:cover;border:1px solid #eee}
-	border-radius: 25px;
-	padding: 12px 30px;
-	font-weight: 600;
-	transition: all 0.3s ease;
-}
+
 
 .btn-primary:hover {
 	background-color: #e55a2b;
@@ -392,7 +395,7 @@ body {
     box-shadow: none !important;
 }
 .user-avatar-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background:#e55a2b !important;
     border-color: transparent !important;
     color: white;
     transform: translateY(-2px);
@@ -954,10 +957,10 @@ body {
 				</div>
 
 				<!-- Existing Reviews -->
-				<div class="card shadow-sm">
-					<div class="card-header bg-light">
-						<h5 class="mb-0">
-							<i class="fas fa-comments me-2"></i>Đánh giá từ khách hàng
+				<div class="  card shadow-sm">
+					<div class="bg-primary card-header ">
+						<h5 class=" mb-0 text-white">
+							<i class=" fas fa-comments me-2 "></i>Đánh giá từ khách hàng
 						</h5>
 					</div>
 					<div class="card-body">
