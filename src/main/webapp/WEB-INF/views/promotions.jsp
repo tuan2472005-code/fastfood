@@ -46,9 +46,8 @@ body{padding-top:76px}
     .navbar-brand video{display:none !important}
 }
 @media (max-width:768px){.navbar-nav .nav-link{margin:.2rem 0}}
-
-.btn-primary{background-color:#ff6b35;border-color:#ff6b35}
-.btn-primary:hover{background-color:#e55a2b;border-color:#e55a2b}
+.btn-primary {background: linear-gradient(135deg, #ff6b35 100%);border: none;border-radius: 10px;padding: 12px 30px;font-weight: 600;}
+.btn-primary:hover {background: linear-gradient(135deg, #e55a2b 100%);}
 .btn-outline-primary{color:#ff6b35;border-color:#ff6b35}
 .btn-outline-primary:hover{background-color:#ff6b35;border-color:#ff6b35;color:#fff}
 .btn-outline-primary.active{background-color:#ff6b35;color:#fff;border-color:#fff}
