@@ -21,7 +21,14 @@
     #chatWidget .form-control{border-radius:10px}
     #chatWidget .bubble-user{background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);color:#fff;padding:8px 12px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
     #chatWidget .bubble-support{background:#f8f9fa;border:1px solid #eee;color:#333;padding:8px 12px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
-    #chatFab{background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);border:none}
+    #chatFab{background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;      /* giữa theo chiều dọc */
+    justify-content: center;  /* giữa theo chiều ngang */
+    padding: 0; /* cực kỳ quan trọng để không bị lệch */}
     #chatFabIcon{transition:transform .2s ease}
     #chatFab.open #chatFabIcon{transform:rotate(90deg)}
 </style>
