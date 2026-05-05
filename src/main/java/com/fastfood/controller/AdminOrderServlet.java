@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import com.fastfood.dao.UserDAO;
 import com.fastfood.dao.OrderDAO;
 import com.fastfood.model.Order;
 import com.fastfood.model.User;
@@ -17,7 +17,13 @@ import com.fastfood.model.User;
 public class AdminOrderServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
-    private OrderDAO orderDAO = new OrderDAO();
+       private OrderDAO orderDAO;
+    private UserDAO userDAO;
+
+    public void init() {
+        orderDAO = new OrderDAO();
+        userDAO = new UserDAO();
+    }
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Cấu hình encoding UTF-8
@@ -91,10 +97,20 @@ public class AdminOrderServlet extends HttpServlet {
             request.setAttribute("filteredUserId", userId);
             
             // Lấy thông tin user để hiển thị tên trong tiêu đề
-            // Ở đây có thể lấy từ orders[0] nếu có
+             String customerName = null;
             if (!orders.isEmpty()) {
-                request.setAttribute("customerName", orders.get(0).getCustomerName());
+                customerName = orders.get(0).getCustomerName();
             }
+            
+            // Nếu vẫn chưa có tên (trường hợp đơn hàng không JOIN được), lấy trực tiếp từ UserDAO
+            if (customerName == null || customerName.isEmpty()) {
+                User user = userDAO.getUserById(userId);
+                if (user != null) {
+                    customerName = user.getFullName();
+                }
+            }
+            
+            request.setAttribute("customerName", customerName);
             
             request.getRequestDispatcher("/WEB-INF/views/admin/order-list.jsp").forward(request, response);
         } catch (SQLException | NumberFormatException e) {
