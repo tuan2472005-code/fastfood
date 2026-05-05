@@ -46,8 +46,11 @@ public class AdminOrderServlet extends HttpServlet {
             case "invoice":
                 printInvoice(request, response);
                 break;
+            case "listOrders":
+                listOrders(request, response);
+                break;
             case "update":
-                if (!isAdmin) { listOrders(request, response); break; }
+                if (!isAdmin) { listUsers(request, response); break; }
                 updateOrderStatus(request, response);
                 break;
             case "updateStatus":
@@ -55,7 +58,7 @@ public class AdminOrderServlet extends HttpServlet {
                 updateOrderStatusFromForm(request, response);
                 break;
             default:
-                listOrders(request, response);
+                listUsers(request, response);
                 break;
         }
     }
@@ -63,13 +66,38 @@ public class AdminOrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
+
+    private void listUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            List<User> users = orderDAO.getUsersWithOrders();
+            request.setAttribute("users", users);
+            request.getRequestDispatcher("/WEB-INF/views/admin/order-user-list.jsp").forward(request, response);
+        } catch (SQLException e) {
+            throw new ServletException("Error retrieving users with orders", e);
+        }
+    }
     
     private void listOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<Order> orders = orderDAO.getAllOrders();
+            String userIdParam = request.getParameter("userId");
+            if (userIdParam == null || userIdParam.isEmpty()) {
+                listUsers(request, response);
+                return;
+            }
+
+            int userId = Integer.parseInt(userIdParam);
+            List<Order> orders = orderDAO.getOrdersByUserId(userId);
             request.setAttribute("orders", orders);
+            request.setAttribute("filteredUserId", userId);
+            
+            // Lấy thông tin user để hiển thị tên trong tiêu đề
+            // Ở đây có thể lấy từ orders[0] nếu có
+            if (!orders.isEmpty()) {
+                request.setAttribute("customerName", orders.get(0).getCustomerName());
+            }
+            
             request.getRequestDispatcher("/WEB-INF/views/admin/order-list.jsp").forward(request, response);
-        } catch (SQLException e) {
+        } catch (SQLException | NumberFormatException e) {
             throw new ServletException("Error retrieving orders", e);
         }
     }
@@ -167,9 +195,15 @@ public class AdminOrderServlet extends HttpServlet {
         try {
             int orderId = Integer.parseInt(request.getParameter("id"));
             String status = request.getParameter("status");
+            String userIdParam = request.getParameter("userId");
             
             orderDAO.updateOrderStatus(orderId, status);
-            response.sendRedirect(request.getContextPath() + "/admin/orders");
+            
+            String redirectUrl = request.getContextPath() + "/admin/orders";
+            if (userIdParam != null && !userIdParam.isEmpty()) {
+                redirectUrl += "?action=listOrders&userId=" + userIdParam;
+            }
+            response.sendRedirect(redirectUrl);
         } catch (SQLException e) {
             throw new ServletException("Error updating order status", e);
         }
@@ -179,9 +213,15 @@ public class AdminOrderServlet extends HttpServlet {
         try {
             int orderId = Integer.parseInt(request.getParameter("orderId"));
             String status = request.getParameter("status");
+            String userIdParam = request.getParameter("userId");
             
             orderDAO.updateOrderStatus(orderId, status);
-            response.sendRedirect(request.getContextPath() + "/admin/orders?action=view&id=" + orderId);
+            
+            if (userIdParam != null && !userIdParam.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/admin/orders?action=listOrders&userId=" + userIdParam);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/admin/orders?action=view&id=" + orderId);
+            }
         } catch (SQLException e) {
             throw new ServletException("Error updating order status", e);
         }
