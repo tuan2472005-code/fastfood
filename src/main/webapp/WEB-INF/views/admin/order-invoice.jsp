@@ -6,7 +6,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Hóa đơn #${order.id}</title>
+<title>Hóa đơn #${order.displayId}</title>
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -95,7 +95,7 @@ body {
 		<div class="header">
 			<div class="brand">Fast Food</div>
 			<div class="meta">
-				<div>Hóa đơn #${order.id}</div>
+				<div>Hóa đơn #${order.displayId}</div>
 				<div>
 					Ngày:
 					<fmt:formatDate value="${order.createdAt}"
