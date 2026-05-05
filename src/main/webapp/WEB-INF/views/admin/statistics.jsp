@@ -21,10 +21,14 @@ body {
 }
 
 .sidebar {
-	min-height: 100vh;
+	height: 100vh;
 	background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
 	color: white;
 	box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	overflow-y: auto;
 }
 
 .sidebar a {
