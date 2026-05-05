@@ -68,6 +68,14 @@
 
 	<!-- Servlet Mappings -->
 	<servlet>
+		<servlet-name>ProductSearchServlet</servlet-name>
+		<servlet-class>com.fastfood.controller.ProductSearchServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ProductSearchServlet</servlet-name>
+		<url-pattern>/api/products/search</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>HomeServlet</servlet-name>
 		<servlet-class>com.fastfood.controller.HomeServlet</servlet-class>
 	</servlet>
