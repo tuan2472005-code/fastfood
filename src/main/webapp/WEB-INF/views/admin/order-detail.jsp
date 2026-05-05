@@ -58,16 +58,17 @@ body {
 	max-width: 83.333333%;
 }
 
-/* Sidebar với gradient đẹp hơn */
 .sidebar {
 	background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #FF8C42 100%);
 	color: white;
 	box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
 	padding: 0;
-	position: relative;
+	position: sticky;
+	top: 0;
 	display: block !important;
 	height: 100vh;
-	min-height: 100vh;
+	z-index: 1000;
+	overflow-y: auto;
 }
 
 .sidebar::before {
@@ -611,7 +612,7 @@ h2, h5 {
 						<!-- Removed sidebar toggle menu button in order detail header -->
 						<h2>
 							<i class="fas fa-receipt me-2 text-primary"></i>Chi tiết đơn hàng
-							#${order.id}
+							#${order.displayId}
 						</h2>
 					</div>
 					<div class="text-muted d-flex align-items-center ms-auto">
@@ -631,7 +632,7 @@ h2, h5 {
 							<div class="row">
 								<div class="col-md-6">
 									<p>
-										<strong>Mã đơn hàng:</strong> #${order.id}
+										<strong>Mã đơn hàng:</strong> #${order.displayId}
 									</p>
 									<p>
 										<strong>Ngày đặt:</strong>
