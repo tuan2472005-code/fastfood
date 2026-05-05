@@ -17,7 +17,7 @@
         .bubble.support{background:#f8f9fa;border:1px solid #eee;color:#333}
         .msg-time{display:none;font-size:.8rem;color:#6c757d;margin-top:4px}
         .msg-item.show .msg-time{display:block}
-        .sidebar{min-height:100vh;background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);color:#fff;box-shadow:2px 0 10px rgba(0,0,0,.1)}
+        .sidebar{height:100vh;background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);color:#fff;box-shadow:2px 0 10px rgba(0,0,0,.1);position:sticky;top:0;z-index:1000;overflow-y:auto}
         .sidebar a{color:rgba(255,255,255,.9);padding:12px 20px;display:block;text-decoration:none;transition:all .3s ease;border-radius:8px;margin:2px 10px}
         .sidebar a:hover{color:#fff;background-color:rgba(255,255,255,.2);transform:translateX(5px)}
         .sidebar a.active{background-color:rgba(255,255,255,.3);color:#fff;font-weight:600}
