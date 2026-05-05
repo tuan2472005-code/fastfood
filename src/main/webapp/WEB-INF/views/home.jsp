@@ -810,7 +810,8 @@ body {
                                                 style="width: 32px; height: 32px; object-fit: cover;">
                                         </c:when>
                                         <c:otherwise>
-                                            <i class="fas fa-user-circle me-2 avatar-icon" style="font-size: 24px;"></i>
+                                            <i class="fas fa-user-circle me-2 avatar-icon"
+                                                style="font-size: 24px;"></i>
                                         </c:otherwise>
                                     </c:choose>
                                     <span style="font-weight: 500;">${sessionScope.user.fullName}</span>
@@ -933,17 +934,17 @@ body {
 		</div>
 	</section>
 
-	<!-- Featured Products -->
-	<section id="featured" class="py-5 bg-white">
+	<!-- Best Selling Products -->
+	<section id="best-selling" class="py-5 bg-white">
 		<div class="container">
 			<div class="text-center mb-5">
-				<h2 class="mb-3">Sản phẩm nổi bật</h2>
-				<p class="text-muted">Những món ăn được yêu thích nhất tại Fast
+				<h2 class="mb-3">Sản phẩm bán chạy</h2>
+				<p class="text-muted">Những món ăn được đặt mua nhiều nhất tại Fast
 					Food</p>
 				<div class="section-divider"></div>
 			</div>
 			<div class="row">
-				<c:forEach var="product" items="${featuredProducts}">
+				<c:forEach var="product" items="${bestSellingProducts}">
 					<div class="col-lg-3 col-md-6 mb-4">
 						<div class="card product-card h-100">
 							<div class="product-image-wrapper">
@@ -972,11 +973,14 @@ body {
 									</div>
 								</div>
 								<div class="product-badge">
-									<span class="badge bg-warning">Nổi bật</span>
+									<span class="badge bg-danger">Bán chạy</span>
 								</div>
 							</div>
 							<div class="card-body text-center">
 								<h5 class="card-title product-name">${product.ten}</h5>
+								<div class="mb-2">
+									<span class="text-muted small"><i class="fas fa-shopping-bag me-1"></i>Đã bán ${product.daBan}</span>
+								</div>
 
 								<!-- Star Rating -->
 								<div class="star-rating">
@@ -1241,7 +1245,7 @@ body {
                         <div class="service-icon"><i class="fas fa-comments"></i></div>
                         <h4>Trò chuyện trực tuyến</h4>
                         <p class="text-muted">Kết nối ngay với CSKH</p>
-                        <button class=" btn btn-primary" data-bs-toggle="modal" data-bs-target="#supportModal">Mở chat</button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#supportModal">Mở chat</button>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
