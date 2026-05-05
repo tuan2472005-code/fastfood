@@ -19,6 +19,7 @@ public class Product {
     private boolean featured;
     private double averageRating;
     private int reviewCount;
+    private int totalSold;
     
     public Product() {
     }
@@ -178,5 +179,18 @@ public class Product {
     
     public void setReviewCount(int reviewCount) {
         this.reviewCount = reviewCount;
+    }
+
+    public int getTotalSold() {
+        return totalSold;
+    }
+
+    public void setTotalSold(int totalSold) {
+        this.totalSold = totalSold;
+    }
+    
+    // Alias cho totalSold
+    public int getDaBan() {
+        return totalSold;
     }
 }
