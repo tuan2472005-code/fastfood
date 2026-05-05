@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-
+import com.fastfood.model.User;
 import com.fastfood.model.Order;
 import com.fastfood.model.OrderItem;
 import com.fastfood.util.DBUtil;
@@ -23,9 +23,9 @@ public class OrderDAO {
                      "dh.dia_chi_giao_hang, dh.so_dien_thoai_giao_hang, dh.ten_nguoi_nhan, dh.ghi_chu, " +
                      "dh.voucher_id, dh.voucher_code, dh.discount_amount, " +
                      "dh.ngay_tao, dh.ngay_cap_nhat, nd.ho_ten as customer_name " +
-                    "FROM don_hang dh " +
-                    "LEFT JOIN nguoi_dung nd ON dh.nguoi_dung_id = nd.id " +
-                    "ORDER BY dh.ngay_tao DESC";
+                     "FROM don_hang dh " +
+                     "LEFT JOIN nguoi_dung nd ON dh.nguoi_dung_id = nd.id " +
+                     "WHERE dh.nguoi_dung_id = ? ORDER BY dh.ngay_tao DESC";
         
         try (Connection conn = DBUtil.getConnection();
              Statement stmt = conn.createStatement();
@@ -195,6 +195,31 @@ public class OrderDAO {
         }
         
         return -1;
+    }
+    public List<User> getUsersWithOrders() throws SQLException {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT DISTINCT nd.* FROM nguoi_dung nd " +
+                     "JOIN don_hang dh ON nd.id = dh.nguoi_dung_id " +
+                     "ORDER BY nd.ho_ten ASC";
+        
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setUsername(rs.getString("ten_dang_nhap"));
+                user.setFullName(rs.getString("ho_ten"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("so_dien_thoai"));
+                user.setAddress(rs.getString("dia_chi"));
+                user.setRole(rs.getString("vai_tro"));
+                try { user.setAvatar(rs.getString("avatar")); } catch (Exception ignore) {}
+                users.add(user);
+            }
+        }
+        return users;
     }
     
     public boolean updateOrderStatus(int orderId, String status) throws SQLException {
