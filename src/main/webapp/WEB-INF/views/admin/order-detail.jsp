@@ -916,7 +916,7 @@ h2, h5 {
 								<form
 									action="${pageContext.request.contextPath}/admin/orders?action=updateStatus"
 									method="post">
-									<input type="hidden" name="orderId" value="${order.id}">
+									<input type="hidden" name="userId" value="${order.userId}">
 									<div class="d-grid gap-2">
 										<c:if test="${order.status == 'CHO_XAC_NHAN'}">
 											<button type="submit" name="status" value="DANG_CHUAN_BI"
