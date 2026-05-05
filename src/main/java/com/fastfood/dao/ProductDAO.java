@@ -17,10 +17,12 @@ public class ProductDAO {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT sp.*, dm.ten as ten_danh_muc, " +
                     "COALESCE(AVG(dg.rating), 0) as avg_rating, " +
-                    "COUNT(dg.id) as review_count " +
+                    "COUNT(DISTINCT dg.id) as review_count, " +
+                    "COALESCE(SUM(ct.so_luong), 0) as total_sold " +
                     "FROM san_pham sp " +
                     "LEFT JOIN danh_muc dm ON sp.danh_muc_id = dm.id " +
                     "LEFT JOIN danh_gia dg ON sp.id = dg.san_pham_id AND dg.trang_thai = 'approved' " +
+                    "LEFT JOIN chi_tiet_don_hang ct ON sp.id = ct.san_pham_id " +
                     "GROUP BY sp.id, dm.ten " +
                     "ORDER BY sp.id ASC";
         
@@ -29,22 +31,7 @@ public class ProductDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
             
             while (rs.next()) {
-                Product product = new Product();
-                product.setId(rs.getInt("id"));
-                product.setName(rs.getString("ten"));
-                product.setDescription(rs.getString("mo_ta"));
-                product.setPrice(rs.getBigDecimal("gia"));
-                product.setDiscountPrice(rs.getBigDecimal("gia_khuyen_mai"));
-                product.setImageUrl(rs.getString("hinh_anh"));
-                product.setCategoryId(rs.getInt("danh_muc_id"));
-                product.setStatus(rs.getString("trang_thai"));
-                product.setStock(rs.getInt("ton_kho"));
-                product.setFeatured(rs.getBoolean("noi_bat"));
-                product.setCategoryName(rs.getString("ten_danh_muc"));
-                product.setAverageRating(rs.getDouble("avg_rating"));
-                product.setReviewCount(rs.getInt("review_count"));
-                product.setCreatedAt(rs.getTimestamp("ngay_tao"));
-                product.setUpdatedAt(rs.getTimestamp("ngay_cap_nhat"));
+                Product product = mapResultSetToProduct(rs);
                 products.add(product);
             }
             
@@ -57,10 +44,16 @@ public class ProductDAO {
     
     public List<Product> getProductsByCategory(int categoryId) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT sp.*, dm.ten as ten_danh_muc " +
+        String sql = "SELECT sp.*, dm.ten as ten_danh_muc, " +
+                    "COALESCE(AVG(dg.rating), 0) as avg_rating, " +
+                    "COUNT(DISTINCT dg.id) as review_count, " +
+                    "COALESCE(SUM(ct.so_luong), 0) as total_sold " +
                     "FROM san_pham sp " +
                     "LEFT JOIN danh_muc dm ON sp.danh_muc_id = dm.id " +
+                    "LEFT JOIN danh_gia dg ON sp.id = dg.san_pham_id AND dg.trang_thai = 'approved' " +
+                    "LEFT JOIN chi_tiet_don_hang ct ON sp.id = ct.san_pham_id " +
                     "WHERE sp.danh_muc_id = ? " +
+                    "GROUP BY sp.id, dm.ten " +
                     "ORDER BY sp.id ASC";
         
         try (Connection conn = DBUtil.getConnection();
@@ -70,20 +63,7 @@ public class ProductDAO {
             
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Product product = new Product();
-                    product.setId(rs.getInt("id"));
-                    product.setName(rs.getString("ten"));
-                    product.setDescription(rs.getString("mo_ta"));
-                    product.setPrice(rs.getBigDecimal("gia"));
-                    product.setDiscountPrice(rs.getBigDecimal("gia_khuyen_mai"));
-                    product.setImageUrl(rs.getString("hinh_anh"));
-                    product.setCategoryId(rs.getInt("danh_muc_id"));
-                    product.setStatus(rs.getString("trang_thai"));
-                    product.setStock(rs.getInt("ton_kho"));
-                    product.setFeatured(rs.getBoolean("noi_bat"));
-                    product.setCategoryName(rs.getString("ten_danh_muc"));
-                    product.setCreatedAt(rs.getTimestamp("ngay_tao"));
-                    product.setUpdatedAt(rs.getTimestamp("ngay_cap_nhat"));
+                    Product product = mapResultSetToProduct(rs);
                     products.add(product);
                 }
             }
@@ -98,10 +78,12 @@ public class ProductDAO {
     public Product getProductById(int id) {
         String sql = "SELECT sp.*, dm.ten as ten_danh_muc, " +
                     "COALESCE(AVG(dg.rating), 0) as avg_rating, " +
-                    "COUNT(dg.id) as review_count " +
+                    "COUNT(DISTINCT dg.id) as review_count, " +
+                    "COALESCE(SUM(ct.so_luong), 0) as total_sold " +
                     "FROM san_pham sp " +
                     "LEFT JOIN danh_muc dm ON sp.danh_muc_id = dm.id " +
                     "LEFT JOIN danh_gia dg ON sp.id = dg.san_pham_id AND dg.trang_thai = 'approved' " +
+                    "LEFT JOIN chi_tiet_don_hang ct ON sp.id = ct.san_pham_id " +
                     "WHERE sp.id = ? " +
                     "GROUP BY sp.id, dm.ten";
         
@@ -112,23 +94,7 @@ public class ProductDAO {
             
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Product product = new Product();
-                    product.setId(rs.getInt("id"));
-                    product.setName(rs.getString("ten"));
-                    product.setDescription(rs.getString("mo_ta"));
-                    product.setPrice(rs.getBigDecimal("gia"));
-                    product.setDiscountPrice(rs.getBigDecimal("gia_khuyen_mai"));
-                    product.setImageUrl(rs.getString("hinh_anh"));
-                    product.setCategoryId(rs.getInt("danh_muc_id"));
-                    product.setStock(rs.getInt("ton_kho"));
-                    product.setFeatured(rs.getBoolean("noi_bat"));
-                    product.setStatus(rs.getString("trang_thai"));
-                    product.setCategoryName(rs.getString("ten_danh_muc"));
-                    product.setAverageRating(rs.getDouble("avg_rating"));
-                    product.setReviewCount(rs.getInt("review_count"));
-                    product.setCreatedAt(rs.getTimestamp("ngay_tao"));
-                    product.setUpdatedAt(rs.getTimestamp("ngay_cap_nhat"));
-                    return product;
+                    return mapResultSetToProduct(rs);
                 }
             }
         } catch (SQLException e) {
@@ -237,22 +203,7 @@ public class ProductDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
             
             while (rs.next()) {
-                Product product = new Product();
-                product.setId(rs.getInt("id"));
-                product.setName(rs.getString("ten"));
-                product.setDescription(rs.getString("mo_ta"));
-                product.setPrice(rs.getBigDecimal("gia"));
-                product.setDiscountPrice(rs.getBigDecimal("gia_khuyen_mai"));
-                product.setImageUrl(rs.getString("hinh_anh"));
-                product.setCategoryId(rs.getInt("danh_muc_id"));
-                product.setStatus(rs.getString("trang_thai"));
-                product.setStock(rs.getInt("ton_kho"));
-                product.setFeatured(rs.getBoolean("noi_bat"));
-                product.setCategoryName(rs.getString("ten_danh_muc"));
-                product.setAverageRating(rs.getDouble("avg_rating"));
-                product.setReviewCount(rs.getInt("review_count"));
-                product.setCreatedAt(rs.getTimestamp("ngay_tao"));
-                product.setUpdatedAt(rs.getTimestamp("ngay_cap_nhat"));
+                Product product = mapResultSetToProduct(rs);
                 products.add(product);
             }
             
@@ -262,6 +213,61 @@ public class ProductDAO {
         }
         
         return products;
+    }
+
+    public List<Product> getBestSellingProducts(int limit) throws SQLException {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT sp.*, dm.ten as ten_danh_muc, " +
+                    "COALESCE(AVG(dg.rating), 0) as avg_rating, " +
+                    "COUNT(DISTINCT dg.id) as review_count, " +
+                    "COALESCE(SUM(ct.so_luong), 0) as total_sold " +
+                    "FROM san_pham sp " +
+                    "LEFT JOIN danh_muc dm ON sp.danh_muc_id = dm.id " +
+                    "LEFT JOIN danh_gia dg ON sp.id = dg.san_pham_id AND dg.trang_thai = 'approved' " +
+                    "LEFT JOIN chi_tiet_don_hang ct ON sp.id = ct.san_pham_id " +
+                    "WHERE sp.trang_thai = 'active' " +
+                    "GROUP BY sp.id, dm.ten " +
+                    "ORDER BY total_sold DESC, sp.ngay_tao DESC " +
+                    "LIMIT ?";
+        
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, limit);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Product product = mapResultSetToProduct(rs);
+                    products.add(product);
+                }
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        
+        return products;
+    }
+
+    private Product mapResultSetToProduct(ResultSet rs) throws SQLException {
+        Product product = new Product();
+        product.setId(rs.getInt("id"));
+        product.setName(rs.getString("ten"));
+        product.setDescription(rs.getString("mo_ta"));
+        product.setPrice(rs.getBigDecimal("gia"));
+        product.setDiscountPrice(rs.getBigDecimal("gia_khuyen_mai"));
+        product.setImageUrl(rs.getString("hinh_anh"));
+        product.setCategoryId(rs.getInt("danh_muc_id"));
+        product.setStatus(rs.getString("trang_thai"));
+        product.setStock(rs.getInt("ton_kho"));
+        product.setFeatured(rs.getBoolean("noi_bat"));
+        product.setCategoryName(rs.getString("ten_danh_muc"));
+        product.setAverageRating(rs.getDouble("avg_rating"));
+        product.setReviewCount(rs.getInt("review_count"));
+        product.setTotalSold(rs.getInt("total_sold"));
+        product.setCreatedAt(rs.getTimestamp("ngay_tao"));
+        product.setUpdatedAt(rs.getTimestamp("ngay_cap_nhat"));
+        return product;
     }
     
     public int getTotalProductCount() throws SQLException {
@@ -281,7 +287,17 @@ public class ProductDAO {
     
     public List<Product> searchProducts(String searchQuery) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM san_pham WHERE (ten LIKE ? OR mo_ta LIKE ?) AND trang_thai = 'active' ORDER BY ten";
+        String sql = "SELECT sp.*, dm.ten as ten_danh_muc, " +
+                    "COALESCE(AVG(dg.rating), 0) as avg_rating, " +
+                    "COUNT(DISTINCT dg.id) as review_count, " +
+                    "COALESCE(SUM(ct.so_luong), 0) as total_sold " +
+                    "FROM san_pham sp " +
+                    "LEFT JOIN danh_muc dm ON sp.danh_muc_id = dm.id " +
+                    "LEFT JOIN danh_gia dg ON sp.id = dg.san_pham_id AND dg.trang_thai = 'approved' " +
+                    "LEFT JOIN chi_tiet_don_hang ct ON sp.id = ct.san_pham_id " +
+                    "WHERE (sp.ten LIKE ? OR sp.mo_ta LIKE ?) AND sp.trang_thai = 'active' " +
+                    "GROUP BY sp.id, dm.ten " +
+                    "ORDER BY sp.ten";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -292,19 +308,7 @@ public class ProductDAO {
             
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Product product = new Product();
-                    product.setId(rs.getInt("id"));
-                    product.setName(rs.getString("ten"));
-                    product.setDescription(rs.getString("mo_ta"));
-                    product.setPrice(rs.getBigDecimal("gia"));
-                    product.setDiscountPrice(rs.getBigDecimal("gia_khuyen_mai"));
-                    product.setImageUrl(rs.getString("hinh_anh"));
-                    product.setCategoryId(rs.getInt("danh_muc_id"));
-                    product.setStatus(rs.getString("trang_thai"));
-                    product.setStock(rs.getInt("ton_kho"));
-                    product.setFeatured(rs.getBoolean("noi_bat"));
-                    product.setCreatedAt(rs.getTimestamp("ngay_tao"));
-                    product.setUpdatedAt(rs.getTimestamp("ngay_cap_nhat"));
+                    Product product = mapResultSetToProduct(rs);
                     products.add(product);
                 }
             }
@@ -315,4 +319,4 @@ public class ProductDAO {
         
         return products;
     }
-}
+}	
