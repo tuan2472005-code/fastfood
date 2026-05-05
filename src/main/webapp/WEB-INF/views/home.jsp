@@ -207,14 +207,13 @@
 }
 
 .btn-primary {
-	background: linear-gradient(135deg, #ff6b35 100%);
-	border: none;
-	border-radius: 10px;
-	padding: 12px 30px;
-	font-weight: 600;
+	background-color: #ff6b35;
+	border-color: #ff6b35;
 }
+
 .btn-primary:hover {
-	background: linear-gradient(135deg, #e55a2b 100%);
+	background-color: #e55a2b;
+	border-color: #e55a2b;
 }
 
 /* Banner Carousel Styles */
