@@ -105,7 +105,7 @@ public class StatisticsServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             request.setAttribute("error", "Có lỗi xảy ra khi tải thống kê");
-            request.getRequestDispatcher("/WEB-INF/views/admin/dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/admin/statistics.jsp").forward(request, response);
         }
     }
     
