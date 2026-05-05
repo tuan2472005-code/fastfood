@@ -3,9 +3,12 @@
     <i id="chatFabIcon" class="fas fa-comments"></i>
 </button>
 <div id="chatWidget" class="card" style="position:fixed;bottom:90px;right:20px;width:320px;max-height:420px;display:none;z-index:1050;box-shadow:0 8px 24px rgba(0,0,0,0.2)">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <span><i class="fas fa-headset me-1"></i>Hỗ trợ trực tuyến</span>
-        <button class="btn btn-sm btn-outline-secondary" id="chatClose">×</button>
+    <div class="card-header d-flex justify-content-between align-items-center" style="cursor: move;" id="chatHeader">
+        <div style="pointer-events: none;">
+            <i class="fas fa-robot me-1"></i>
+            <span id="chatTitle">AI Hỗ trợ trực tuyến</span>
+        </div>
+        <button class="btn btn-sm text-white" id="chatClose" style="pointer-events: auto;"><i class="fas fa-times"></i></button>
     </div>
     <div class="card-body" style="overflow:auto;max-height:300px" id="chatMessages"></div>
     <div class="card-footer">
@@ -16,19 +19,13 @@
     </div>
     </div>
 <style>
-    #chatWidget .card-header{background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);color:#fff;border:none}
-    #chatWidget .btn.btn-primary{background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);border:none}
+    #chatWidget .card-header{background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);color:#fff;border:none;border-radius:15px 15px 0 0}
+    #chatWidget {border-radius:15px;border:none}
+    #chatWidget .btn.btn-primary{background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);border:none;border-radius:10px}
     #chatWidget .form-control{border-radius:10px}
     #chatWidget .bubble-user{background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);color:#fff;padding:8px 12px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
     #chatWidget .bubble-support{background:#f8f9fa;border:1px solid #eee;color:#333;padding:8px 12px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
-    #chatFab{background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;      /* giữa theo chiều dọc */
-    justify-content: center;  /* giữa theo chiều ngang */
-    padding: 0; /* cực kỳ quan trọng để không bị lệch */}
+    #chatFab{background:linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);border:none}
     #chatFabIcon{transition:transform .2s ease}
     #chatFab.open #chatFabIcon{transform:rotate(90deg)}
 </style>
@@ -44,7 +41,13 @@
     var poll = null;
     function render(messages){
         msgBox.innerHTML = '';
+        var hasHuman = false;
         messages.forEach(function(m){
+            if (m.sender === 'support' && !m.content.includes("Xin lỗi, mình chưa hiểu") && !m.content.includes("AI hỗ trợ")) {
+                // Đơn giản hóa: nếu có tin nhắn không phải từ AI (quy ước nội dung)
+                // Thực tế nên có flag từ server, nhưng ở đây dùng nội dung để giả lập
+            }
+            
             var align = m.sender === 'user' ? 'text-end' : 'text-start';
             var cls = m.sender === 'user' ? 'bubble-user' : 'bubble-support';
             var item = document.createElement('div');
@@ -52,6 +55,14 @@
             var bubble = document.createElement('div');
             bubble.className = 'd-inline-block ' + cls;
             bubble.textContent = m.content;
+            
+            // Icon cho AI hoặc User
+            if (m.sender === 'support') {
+                var icon = document.createElement('i');
+                icon.className = 'fas fa-robot me-1 small opacity-50';
+                bubble.prepend(icon);
+            }
+
             var time = document.createElement('div');
             time.className = 'small text-muted mt-1';
             time.textContent = m.time;
@@ -104,5 +115,67 @@
     closeBtn.addEventListener('click', function(){ closeWidget(); });
     send.addEventListener('click', sendMessage);
     input.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); sendMessage(); }});
+
+    // Tính năng kéo thả (Draggable) cho Chat Widget
+    var chatHeader = document.getElementById('chatHeader');
+    var isDragging = false;
+    var currentX;
+    var currentY;
+    var initialX;
+    var initialY;
+    var xOffset = 0;
+    var yOffset = 0;
+
+    function dragStart(e) {
+        if (e.type === "touchstart") {
+            initialX = e.touches[0].clientX - xOffset;
+            initialY = e.touches[0].clientY - yOffset;
+        } else {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+        }
+
+        if (e.target === chatHeader) {
+            isDragging = true;
+        }
+    }
+
+    function dragEnd(e) {
+        initialX = currentX;
+        initialY = currentY;
+        isDragging = false;
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
+            if (e.type === "touchmove") {
+                currentX = e.touches[0].clientX - initialX;
+                currentY = e.touches[0].clientY - initialY;
+            } else {
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+            }
+
+            xOffset = currentX;
+            yOffset = currentY;
+
+            setTranslate(currentX, currentY, widget);
+        }
+    }
+
+    function setTranslate(xPos, yPos, el) {
+        el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+    }
+
+    // Gán sự kiện chuột
+    chatHeader.addEventListener("mousedown", dragStart, false);
+    document.addEventListener("mouseup", dragEnd, false);
+    document.addEventListener("mousemove", drag, false);
+
+    // Gán sự kiện cảm ứng cho điện thoại
+    chatHeader.addEventListener("touchstart", dragStart, false);
+    document.addEventListener("touchend", dragEnd, false);
+    document.addEventListener("touchmove", drag, false);
 })();
 </script>
