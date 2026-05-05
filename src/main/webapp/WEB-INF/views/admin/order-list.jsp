@@ -281,10 +281,9 @@ body {
 						<div
 							class="d-flex justify-content-between align-items-center mb-3">
 							<div class="d-flex align-items-center">
-								<button class="btn btn-outline-primary d-md-none me-2"
-									id="adminMenuBtn" aria-label="Mở menu">
-									<i class="fas fa-bars"></i>
-								</button>
+								<a href="${pageContext.request.contextPath}/admin/orders" class="btn btn-outline-secondary me-3">
+									<i class="fas fa-arrow-left"></i>
+								</a>
 								<h4 class="mb-0">
 									<i class="fas fa-shopping-cart me-2 text-primary"></i>Đơn hàng của: 
 									<span class="text-primary">${not empty customerName ? customerName : 'Khách hàng #'.concat(filteredUserId)}</span>
@@ -306,12 +305,11 @@ body {
 							<table class="table table-hover align-middle">
 								<thead class="table-light">
 									<tr>
-										<th><i class="fas fa-hashtag me-1"></i>ID</th>
-										<th><i class="fas fa-user me-1"></i>Khách hàng</th>
-										<th><i class="fas fa-calendar-alt me-1"></i>Ngày đặt</th>
-										<th><i class="fas fa-money-bill me-1"></i>Tổng tiền</th>
-										<th><i class="fas fa-info-circle me-1"></i>Trạng thái</th>
-										<th><i class="fas fa-cogs me-1"></i>Thao tác</th>
+										<th>Mã đơn hàng</th>
+										<th>Ngày đặt</th>
+										<th>Tổng tiền</th>
+										<th>Trạng thái</th>
+										<th>Thao tác</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -357,19 +355,19 @@ body {
                                                         </button>
                                                         <ul class="dropdown-menu">
                                                             <li><a class="dropdown-item"
-                                                                href="${pageContext.request.contextPath}/admin/orders?action=update&id=${order.id}&status=CHO_XAC_NHAN"><i
+                                                                href="${pageContext.request.contextPath}/admin/orders?action=update&id=${order.id}&status=CHO_XAC_NHAN${not empty filteredUserId ? '&userId='.concat(filteredUserId) : ''}"><i
                                                                     class="fas fa-clock me-2"></i>Chờ xác nhận</a></li>
                                                             <li><a class="dropdown-item"
-                                                                href="${pageContext.request.contextPath}/admin/orders?action=update&id=${order.id}&status=DANG_CHUAN_BI"><i
+                                                                href="${pageContext.request.contextPath}/admin/orders?action=update&id=${order.id}&status=DANG_CHUAN_BI${not empty filteredUserId ? '&userId='.concat(filteredUserId) : ''}"><i
                                                                     class="fas fa-utensils me-2"></i>Đang chuẩn bị</a></li>
                                                             <li><a class="dropdown-item"
-                                                                href="${pageContext.request.contextPath}/admin/orders?action=update&id=${order.id}&status=DANG_GIAO"><i
+                                                                href="${pageContext.request.contextPath}/admin/orders?action=update&id=${order.id}&status=DANG_GIAO${not empty filteredUserId ? '&userId='.concat(filteredUserId) : ''}"><i
                                                                     class="fas fa-truck me-2"></i>Đang giao</a></li>
                                                             <li><a class="dropdown-item"
-                                                                href="${pageContext.request.contextPath}/admin/orders?action=update&id=${order.id}&status=DA_GIAO"><i
+                                                                href="${pageContext.request.contextPath}/admin/orders?action=update&id=${order.id}&status=DA_GIAO${not empty filteredUserId ? '&userId='.concat(filteredUserId) : ''}"><i
                                                                     class="fas fa-check me-2"></i>Đã giao</a></li>
                                                             <li><a class="dropdown-item"
-                                                                href="${pageContext.request.contextPath}/admin/orders?action=update&id=${order.id}&status=DA_HUY"><i
+                                                                href="${pageContext.request.contextPath}/admin/orders?action=update&id=${order.id}&status=DA_HUY${not empty filteredUserId ? '&userId='.concat(filteredUserId) : ''}"><i
                                                                     class="fas fa-times me-2"></i>Đã hủy</a></li>
                                                         </ul>
                                                     </div>
