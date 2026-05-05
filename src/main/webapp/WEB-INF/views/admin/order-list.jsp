@@ -286,8 +286,8 @@ body {
 									<i class="fas fa-bars"></i>
 								</button>
 								<h4 class="mb-0">
-									<i class="fas fa-shopping-cart me-2 text-primary"></i>Danh sách
-									đơn hàng
+									<i class="fas fa-shopping-cart me-2 text-primary"></i>Đơn hàng của: 
+									<span class="text-primary">${not empty customerName ? customerName : 'Khách hàng #'.concat(filteredUserId)}</span>
 								</h4>
 							</div>
 						</div>
