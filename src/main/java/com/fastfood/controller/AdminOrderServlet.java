@@ -201,7 +201,7 @@ public class AdminOrderServlet extends HttpServlet {
             
             String redirectUrl = request.getContextPath() + "/admin/orders";
             if (userIdParam != null && !userIdParam.isEmpty()) {
-                redirectUrl += "?action=listOrders&userId=" + userIdParam;
+                 redirectUrl += "?action=listOrders&userId=" + userIdParam;
             }
             response.sendRedirect(redirectUrl);
         } catch (SQLException e) {
