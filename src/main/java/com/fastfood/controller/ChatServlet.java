@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.fastfood.model.User;
+import com.fastfood.util.ChatAIHandler;
 
 
 public class ChatServlet extends HttpServlet {
@@ -65,7 +66,7 @@ public class ChatServlet extends HttpServlet {
             messages = new ArrayList<>();
             Map<String, String> m = new HashMap<>();
             m.put("sender", "support");
-            m.put("content", "Xin chào! Bạn cần hỗ trợ gì?");
+            m.put("content", "Xin chào! Mình là AI hỗ trợ của Fast Food. Bạn cần mình giúp gì về menu, giờ làm việc hay phí ship không ạ?");
             m.put("time", new SimpleDateFormat("HH:mm dd/MM").format(new Date()));
             messages.add(m);
             store.put(sid, messages);
@@ -126,22 +127,21 @@ public class ChatServlet extends HttpServlet {
             }
         } catch (Exception ignore) {}
         messages.add(userMsg);
-        boolean hasAck = false;
-        for (Map<String, String> msg : messages) {
-            String sender = msg.get("sender");
-            String cnt = msg.get("content");
-            if ("support".equals(sender) && "CSKH đã nhận tin nhắn của bạn. Nhân viên sẽ phản hồi sớm.".equals(cnt)) {
-                hasAck = true;
-                break;
-            }
+        
+        // AI Bot phản hồi tự động
+        String userName = "Khách";
+        if (userObjPost instanceof User) {
+            User u = (User) userObjPost;
+            userName = (u.getFullName() != null && !u.getFullName().isEmpty()) ? u.getFullName() : u.getUsername();
         }
-        if (!hasAck) {
-            Map<String, String> supportMsg = new HashMap<>();
-            supportMsg.put("sender", "support");
-            supportMsg.put("content", "CSKH đã nhận tin nhắn của bạn. Nhân viên sẽ phản hồi sớm.");
-            supportMsg.put("time", new SimpleDateFormat("HH:mm dd/MM").format(new Date()));
-            messages.add(supportMsg);
-        }
+        
+        String aiResponse = ChatAIHandler.getResponse(content, userName);
+        Map<String, String> supportMsg = new HashMap<>();
+        supportMsg.put("sender", "support");
+        supportMsg.put("content", aiResponse);
+        supportMsg.put("time", new SimpleDateFormat("HH:mm dd/MM").format(new Date()));
+        messages.add(supportMsg);
+
         if (messages.size() > 200) messages = messages.subList(messages.size() - 200, messages.size());
         store.put(sid, messages);
         Object userObj = session.getAttribute("user");
