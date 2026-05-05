@@ -9,6 +9,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sản phẩm - Fast Food</title>
+<link rel="icon" href="<c:url value='/images/logofastfood.png'/>" type="image/png">
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -821,12 +822,6 @@ body {
         categoryFilter.addEventListener('change', performSearch);
     });
     </script>
-	<jsp:include page="/WEB-INF/views/includes/chat-widget.jsp" />
-</body>
-</html>
-
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 	<jsp:include page="/WEB-INF/views/includes/chat-widget.jsp" />
 </body>
 </html>
