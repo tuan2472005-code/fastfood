@@ -77,6 +77,10 @@ public class Order {
         this.totalAmount = totalAmount;
     }
 
+     public String getDisplayId() {
+        return String.format("FF%06d", id);
+    }
+
     public String getStatus() {
         return status;
     }
