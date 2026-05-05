@@ -317,8 +317,7 @@ body {
 								<tbody>
 									<c:forEach var="order" items="${orders}" varStatus="loop">
 										<tr>
-											<td data-label="ID"><strong>#${loop.index + 1}</strong></td>
-											<td data-label="Khách hàng"><strong>${order.customerName}</strong></td>
+											<td data-label="Mã đơn hàng"><strong>#${order.displayId}</strong></td>
 											<td data-label="Ngày đặt"><fmt:formatDate
 													value="${order.createdAt}" pattern="dd/MM/yyyy HH:mm" /></td>
 											<td data-label="Tổng tiền"><strong><fmt:formatNumber
