@@ -39,9 +39,9 @@ public class HomeServlet extends HttpServlet {
             List<Category> categories = categoryDAO.getAllCategories();
             request.setAttribute("categories", categories);
             
-            // Lấy sản phẩm nổi bật (giả sử là 4 sản phẩm đầu tiên)
-            List<Product> featuredProducts = productDAO.getFeaturedProducts();
-            request.setAttribute("featuredProducts", featuredProducts);
+         // Lấy sản phẩm bán chạy (Top 4)
+            List<Product> bestSellingProducts = productDAO.getBestSellingProducts(4);
+            request.setAttribute("bestSellingProducts", bestSellingProducts);
             
             // Lấy sản phẩm theo từng danh mục
             Map<Integer, List<Product>> productsByCategory = new HashMap<>();
