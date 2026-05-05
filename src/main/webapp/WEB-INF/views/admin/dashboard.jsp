@@ -18,6 +18,7 @@ body {
 	background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	min-height: 100vh;
+	color: #212529; 
 }
 
 .dashboard-title {
@@ -76,10 +77,14 @@ body {
 }
 
 .sidebar {
-	min-height: 100vh;
+	height: 100vh;
 	background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
 	color: white;
 	box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	overflow-y: auto;
 }
 
 .sidebar::before {
@@ -192,7 +197,19 @@ body {
 	font-size: 0.8em;
 	font-weight: 500;
 }
+.table thead th {
+    color: #000000 !important;
+    font-weight: 700 !important;
+}
 
+/* Đổi màu chữ liên kết sang màu đen */
+.table a.text-decoration-none {
+    color: #212529 !important;
+}
+
+.table a.text-decoration-none:hover {
+    color: #FF6B35 !important;
+}
 .status-pending {
 	background-color: #fff3cd;
 	color: #856404;
@@ -366,7 +383,7 @@ body {
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
                             <div class="stats-content">
-                                <h3>${totalRevenue != null ? totalRevenue : 0}đ</h3>
+                                <h3><fmt:formatNumber value="${totalRevenue != null ? totalRevenue : 0}" pattern="#,###" />đ</h3>
                                 <p>Doanh thu</p>
                             </div>
                         </div>
@@ -413,25 +430,32 @@ body {
 							<h4 class="mb-0">
 								<i class="fas fa-clock me-2 text-primary"></i>Đơn hàng gần đây
 							</h4>
+							<a href="${pageContext.request.contextPath}/admin/orders" class="btn btn-sm btn-link text-decoration-none">
+								Xem tất cả khách hàng <i class="fas fa-arrow-right ms-1"></i>
+							</a>
 						</div>
 
 						<div class="table-responsive d-none d-md-block">
 							<table class="table table-hover">
 								<thead class="table-light">
 									<tr>
-										<th><i class="fas fa-hashtag me-1"></i>ID</th>
-										<th><i class="fas fa-user me-1"></i>Khách hàng</th>
-										<th><i class="fas fa-calendar-alt me-1"></i>Ngày đặt</th>
-										<th><i class="fas fa-money-bill me-1"></i>Tổng tiền</th>
-										<th><i class="fas fa-info-circle me-1"></i>Trạng thái</th>
-										<th><i class="fas fa-cogs me-1"></i>Thao tác</th>
+										<th>Mã đơn hàng</th>
+										<th>Khách hàng</th>
+										<th>Ngày đặt</th>
+										<th>Tổng tiền</th>
+										<th>Trạng thái</th>
+										<th>Thao tác</th>
 									</tr>
 								</thead>
 								<tbody>
 									<c:forEach var="order" items="${recentOrders}">
 										<tr>
-											<td><strong>#${order.id}</strong></td>
-											<td>${order.customerName}</td>
+											<td><strong>#${order.displayId}</strong></td>
+											<td>
+												<a href="${pageContext.request.contextPath}/admin/orders?action=listOrders&userId=${order.userId}" class="text-decoration-none fw-bold">
+													${order.customerName}
+												</a>
+											</td>
 											<td><fmt:formatDate value="${order.createdAt}"
 													pattern="dd/MM/yyyy" /></td>
 											<td><strong><fmt:formatNumber
@@ -461,7 +485,7 @@ body {
 												</c:choose></td>
 											<td><a
 												href="${pageContext.request.contextPath}/admin/orders?action=view&id=${order.id}"
-												class="btn btn-sm btn-outline-primary"> <i
+												class="btn btn-sm btn-outline-dark"> <i
 													class="fas fa-eye"></i>
 											</a></td>
 										</tr>
@@ -474,7 +498,10 @@ body {
 								<div class="order-card">
 									<div class="order-card-header">
 										<div>
-											<strong>#${loop.index + 1}</strong> · ${order.customerName}
+											<strong>#${order.displayId}</strong> · 
+											<a href="${pageContext.request.contextPath}/admin/orders?action=listOrders&userId=${order.userId}" class="text-decoration-none">
+												${order.customerName}
+											</a>
 										</div>
 										<div>
 											<c:choose>
