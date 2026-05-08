@@ -329,6 +329,14 @@ h2, h4, h5, h6 {
 						<span>Phí vận chuyển: </span> <span><fmt:formatNumber
 								value="${shippingFee}" type="currency" currencySymbol="₫" /></span>
 					</div>
+                    <c:if test="${not empty loyaltyDiscountAmount and loyaltyDiscountAmount > 0}">
+                        <div class="mb-2 text-warning">
+                            <span><i class="fas fa-coins me-1"></i>Ưu đãi tích lũy
+                                (${loyaltyDiscountLabel}): </span> <span>-<fmt:formatNumber
+                                    value="${loyaltyDiscountAmount}" type="currency"
+                                    currencySymbol="₫" /></span>
+                        </div>
+                    </c:if>
 					<!-- Product Discount -->
                     <c:if
                         test="${not empty sessionScope.appliedProductVoucher and not empty sessionScope.productDiscountAmount and sessionScope.productDiscountAmount > 0}">
