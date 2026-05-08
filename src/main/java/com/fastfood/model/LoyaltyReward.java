@@ -98,6 +98,6 @@ public class LoyaltyReward {
     public String getDisplayLabel() {
         String threshold = thresholdAmount != null ? String.format("%,.0f", thresholdAmount) : "0";
         String rate = discountRate != null ? discountRate.stripTrailingZeros().toPlainString() : "0";
-        return "Tich luy " + threshold + "d giam " + rate + "%, con " + remainingUses + "/" + maxUses + " luot";
+        return "Tích Lũy " + threshold + "d Giảm " + rate + "%, Còn " + remainingUses + "/" + maxUses + " Lượt";
     }
 }
