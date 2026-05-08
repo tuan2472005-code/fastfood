@@ -915,7 +915,7 @@ body {
             applyBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Đang kiểm tra...';
             
             // Call voucher validation API for product voucher
-            fetch('${pageContext.request.contextPath}/voucher?code=' + encodeURIComponent(voucherCode) + '&total=' + originalSubtotal + '&type=PRODUCT')
+            fetch('${pageContext.request.contextPath}/voucher?code=' + encodeURIComponent(voucherCode) + '&total=' + discountedSubtotal + '&type=PRODUCT')
                 .then(response => response.json())
                 .then(data => {
                     console.log('Product Voucher API Response:', data);
