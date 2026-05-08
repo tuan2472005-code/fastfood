@@ -12,25 +12,29 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
 
+import com.fastfood.dao.LoyaltyRewardDAO;
 import com.fastfood.dao.OrderDAO;
 import com.fastfood.dao.ProductDAO;
 import com.fastfood.dao.VoucherDAO;
 import com.fastfood.model.CartItem;
+import com.fastfood.model.LoyaltyReward;
 import com.fastfood.model.Order;
 import com.fastfood.model.OrderItem;
 import com.fastfood.model.Product;
 import com.fastfood.model.User;
 import com.fastfood.model.Voucher;
 
-
 public class CheckoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private static final BigDecimal SHIPPING_FEE = new BigDecimal("15000.00");
     
+    private LoyaltyRewardDAO loyaltyRewardDAO;
     private OrderDAO orderDAO;
     private ProductDAO productDAO;
     private VoucherDAO voucherDAO;
     
     public void init() {
+        loyaltyRewardDAO = new LoyaltyRewardDAO();
         orderDAO = new OrderDAO();
         productDAO = new ProductDAO();
         voucherDAO = new VoucherDAO();
@@ -69,12 +73,23 @@ public class CheckoutServlet extends HttpServlet {
             subtotal = subtotal.add(item.getSubtotal());
         }
         
-        // Phí ship cố định
-        BigDecimal shippingFee = new BigDecimal("15000.00");
-        BigDecimal totalAmount = subtotal.add(shippingFee);
+        LoyaltyReward loyaltyReward;
+        try {
+            loyaltyReward = loyaltyRewardDAO.findBestAvailableReward(user.getId());
+        } catch (SQLException e) {
+            throw new ServletException("Khong the tai uu dai tich luy", e);
+        }
+
+        BigDecimal loyaltyDiscountAmount = loyaltyRewardDAO.calculateDiscount(loyaltyReward, subtotal);
+        BigDecimal discountedSubtotal = subtotal.subtract(loyaltyDiscountAmount);
+        BigDecimal shippingFee = SHIPPING_FEE;
+        BigDecimal totalAmount = discountedSubtotal.add(shippingFee);
         
         request.setAttribute("cart", cart);
         request.setAttribute("subtotal", subtotal);
+        request.setAttribute("loyaltyDiscountAmount", loyaltyDiscountAmount);
+        request.setAttribute("loyaltyDiscountLabel", getLoyaltyRewardLabel(loyaltyReward));
+        request.setAttribute("discountedSubtotal", discountedSubtotal);
         request.setAttribute("shippingFee", shippingFee);
         request.setAttribute("totalAmount", totalAmount);
         request.getRequestDispatcher("/WEB-INF/views/checkout.jsp").forward(request, response);
@@ -168,18 +183,19 @@ public class CheckoutServlet extends HttpServlet {
                 subtotal = subtotal.add(item.getSubtotal());
             }
             
-            // Phí ship cố định
-            BigDecimal shippingFee = new BigDecimal("15000.00");
-            BigDecimal totalAmount = subtotal.add(shippingFee);
+            LoyaltyReward loyaltyReward = loyaltyRewardDAO.findBestAvailableReward(user.getId());
+            BigDecimal loyaltyDiscountAmount = loyaltyRewardDAO.calculateDiscount(loyaltyReward, subtotal);
+            BigDecimal discountedSubtotal = subtotal.subtract(loyaltyDiscountAmount);
+            BigDecimal shippingFee = SHIPPING_FEE;
             
-            // Xử lý voucher sản phẩm (áp dụng giảm giá cho subtotal)
-            BigDecimal discountAmount = BigDecimal.ZERO;
+            // Xử lý voucher sản phẩm sau khi đã áp dụng ưu đãi tích lũy
+            BigDecimal voucherDiscountAmount = BigDecimal.ZERO;
             Voucher productVoucher = null;
             if (voucherCode != null && !voucherCode.trim().isEmpty()) {
                 productVoucher = voucherDAO.findByCodeAndType(voucherCode.trim().toUpperCase(), "PRODUCT");
                 if (productVoucher != null && productVoucher.isValid()) {
-                    if (subtotal.compareTo(productVoucher.getMinOrderAmount()) >= 0) {
-                        discountAmount = productVoucher.calculateDiscount(subtotal);
+                    if (discountedSubtotal.compareTo(productVoucher.getMinOrderAmount()) >= 0) {
+                        voucherDiscountAmount = productVoucher.calculateDiscount(discountedSubtotal);
                         
                         // Cập nhật ghi chú đơn hàng với thông tin voucher sản phẩm
                         String voucherNote = "Áp dụng voucher sản phẩm: " + productVoucher.getCode() + " - " + productVoucher.getName();
@@ -217,17 +233,31 @@ public class CheckoutServlet extends HttpServlet {
                 finalShippingFee = BigDecimal.ZERO;
             }
             
-            // Tính tổng tiền cuối cùng (subtotal - product_discount + final_shipping_fee)
-            BigDecimal finalAmount = subtotal.subtract(discountAmount).add(finalShippingFee);
+            if (loyaltyDiscountAmount.compareTo(BigDecimal.ZERO) > 0) {
+                String loyaltyDiscountNote = "Ap dung uu dai tich luy: " + getLoyaltyRewardLabel(loyaltyReward)
+                        + " (-" + loyaltyDiscountAmount.toPlainString() + "d)";
+                if (notes != null && !notes.trim().isEmpty()) {
+                    notes = notes + "\n" + loyaltyDiscountNote;
+                } else {
+                    notes = loyaltyDiscountNote;
+                }
+            }
+            
+            BigDecimal totalProductDiscount = loyaltyDiscountAmount.add(voucherDiscountAmount);
+            BigDecimal finalAmount = discountedSubtotal.subtract(voucherDiscountAmount).add(finalShippingFee);
             order.setTotalAmount(finalAmount);
             order.setShippingFee(shippingFee);
             order.setNote(notes);
             
+            // Lưu tổng giảm giá phía sản phẩm vào đơn hàng
+            if (totalProductDiscount.compareTo(BigDecimal.ZERO) > 0) {
+                order.setDiscountAmount(totalProductDiscount);
+            }
+            
             // Lưu thông tin voucher sản phẩm vào đơn hàng
-            if (productVoucher != null && discountAmount.compareTo(BigDecimal.ZERO) > 0) {
+            if (productVoucher != null && voucherDiscountAmount.compareTo(BigDecimal.ZERO) > 0) {
                 order.setVoucherId(productVoucher.getId());
                 order.setVoucherCode(productVoucher.getCode());
-                order.setDiscountAmount(discountAmount);
             }
             
             // Lưu thông tin voucher vận chuyển vào đơn hàng
@@ -258,8 +288,12 @@ public class CheckoutServlet extends HttpServlet {
                 }
                 
                 // Cập nhật số lần sử dụng voucher sản phẩm nếu có
-                if (productVoucher != null && discountAmount.compareTo(BigDecimal.ZERO) > 0) {
+                if (productVoucher != null && voucherDiscountAmount.compareTo(BigDecimal.ZERO) > 0) {
                     voucherDAO.incrementUsage(productVoucher.getId());
+                }
+
+                if (loyaltyReward != null && loyaltyDiscountAmount.compareTo(BigDecimal.ZERO) > 0) {
+                    loyaltyRewardDAO.consumeReward(loyaltyReward.getId());
                 }
                 
                 // Cập nhật số lần sử dụng voucher vận chuyển nếu có
@@ -283,20 +317,36 @@ public class CheckoutServlet extends HttpServlet {
                 } catch (Exception ignore) {}
                 
                 // Lưu thông tin voucher vào session để hiển thị ở trang success
-                if (productVoucher != null && discountAmount.compareTo(BigDecimal.ZERO) > 0) {
+                if (loyaltyDiscountAmount.compareTo(BigDecimal.ZERO) > 0) {
+                    session.setAttribute("loyaltyDiscountAmount", loyaltyDiscountAmount);
+                    session.setAttribute("loyaltyDiscountLabel", getLoyaltyRewardLabel(loyaltyReward));
+                } else {
+                    session.removeAttribute("loyaltyDiscountAmount");
+                    session.removeAttribute("loyaltyDiscountLabel");
+                }
+                
+                if (productVoucher != null && voucherDiscountAmount.compareTo(BigDecimal.ZERO) > 0) {
                     session.setAttribute("appliedProductVoucher", productVoucher);
-                    session.setAttribute("productDiscountAmount", discountAmount);
+                    session.setAttribute("productDiscountAmount", voucherDiscountAmount);
+                } else {
+                    session.removeAttribute("appliedProductVoucher");
+                    session.removeAttribute("productDiscountAmount");
                 }
                 
                 if (shippingVoucher != null && shippingDiscountAmount.compareTo(BigDecimal.ZERO) > 0) {
                     session.setAttribute("appliedShippingVoucher", shippingVoucher);
                     session.setAttribute("shippingDiscountAmount", shippingDiscountAmount);
+                } else {
+                    session.removeAttribute("appliedShippingVoucher");
+                    session.removeAttribute("shippingDiscountAmount");
                 }
                 
                 // Chuyển đến trang thành công với thông tin phương thức thanh toán
                 request.setAttribute("orderId", orderId);
                 request.setAttribute("paymentMethod", paymentMethod);
                 request.setAttribute("subtotal", subtotal);
+                request.setAttribute("loyaltyDiscountAmount", loyaltyDiscountAmount);
+                request.setAttribute("loyaltyDiscountLabel", getLoyaltyRewardLabel(loyaltyReward));
                 request.setAttribute("shippingFee", shippingFee);
                 request.setAttribute("totalAmount", finalAmount);
                 
@@ -319,5 +369,9 @@ public class CheckoutServlet extends HttpServlet {
             request.setAttribute("error", "Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.");
             doGet(request, response);
         }
+    }
+
+    private String getLoyaltyRewardLabel(LoyaltyReward loyaltyReward) {
+        return loyaltyReward != null ? loyaltyReward.getDisplayLabel() : "";
     }
 }
