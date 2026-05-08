@@ -9,6 +9,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thanh toán - Fast Food</title>
+<link rel="icon" href="<c:url value='/images/logofastfood.png'/>" type="image/png">
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -708,6 +709,15 @@ body {
 										value="${shippingFee}" type="currency" currencySymbol="₫" />
 								</span>
 							</div>
+							<div id="loyaltyDiscountRow"
+								class="d-flex justify-content-between align-items-center mb-2 text-warning"
+								style="${loyaltyDiscountAmount > 0 ? '' : 'display: none;'}">
+								<span><i class="fas fa-coins me-1"></i>Ưu đãi tích lũy:
+									<small id="loyaltyDiscountLabel">${loyaltyDiscountLabel}</small></span> <span
+									id="loyaltyDiscountAmount">-<fmt:formatNumber
+										value="${loyaltyDiscountAmount}" type="currency"
+										currencySymbol="₫" /></span>
+							</div>
 							<!-- Product Discount Row -->
 							<div id="productDiscountRow"
 								class="d-flex justify-content-between align-items-center mb-2 text-info"
@@ -895,6 +905,8 @@ body {
         let appliedVoucher = null;
         let appliedShippingVoucher = null;
         let originalSubtotal = ${subtotal};
+        let currentLoyaltyDiscount = ${loyaltyDiscountAmount != null ? loyaltyDiscountAmount : 0};
+        let discountedSubtotal = ${discountedSubtotal != null ? discountedSubtotal : subtotal};
         let shippingFee = ${shippingFee};
         let originalTotal = ${totalAmount};
         let currentProductDiscount = 0;
@@ -1037,11 +1049,13 @@ body {
             // Calculate final shipping fee after discount
             const finalShippingFee = Math.max(0, shippingFee - currentShippingDiscount);
             
-            // Calculate new total
-            const newTotal = originalSubtotal - currentProductDiscount + finalShippingFee;
-            console.log('Calculation: originalSubtotal:', originalSubtotal, '- productDiscount:', currentProductDiscount, '+ finalShippingFee:', finalShippingFee, '= newTotal:', newTotal);
+            // Calculate new total after bulk discount + product voucher + shipping voucher
+            const newTotal = discountedSubtotal - currentProductDiscount + finalShippingFee;
+            console.log('Calculation: discountedSubtotal:', discountedSubtotal, '- productDiscount:', currentProductDiscount, '+ finalShippingFee:', finalShippingFee, '= newTotal:', newTotal);
             
             // Get elements
+            const loyaltyDiscountRow = document.getElementById('loyaltyDiscountRow');
+            const loyaltyDiscountAmountSpan = document.getElementById('loyaltyDiscountAmount');
             const productDiscountRow = document.getElementById('productDiscountRow');
             const productDiscountAmountSpan = document.getElementById('productDiscountAmount');
             const shippingDiscountRow = document.getElementById('shippingDiscountRow');
@@ -1049,7 +1063,17 @@ body {
             const finalTotalSpan = document.getElementById('finalTotal');
             const bankTransferAmountSpans = document.querySelectorAll('.bank-transfer-amount');
             
-            
+            if (currentLoyaltyDiscount > 0) {
+                if (loyaltyDiscountRow) {
+                    loyaltyDiscountRow.style.display = 'flex';
+                }
+                if (loyaltyDiscountAmountSpan) {
+                    loyaltyDiscountAmountSpan.textContent = '-' + formatCurrency(currentLoyaltyDiscount);
+                }
+            } else if (loyaltyDiscountRow) {
+                loyaltyDiscountRow.style.display = 'none';
+            }
+
             if (currentProductDiscount > 0) {
                 if (productDiscountRow) {
                     productDiscountRow.style.display = 'flex';
