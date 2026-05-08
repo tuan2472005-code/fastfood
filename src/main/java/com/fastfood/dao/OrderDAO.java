@@ -223,6 +223,7 @@ public class OrderDAO {
     }
     
     public boolean updateOrderStatus(int orderId, String status) throws SQLException {
+        OrderStatusSnapshot snapshot = getOrderStatusSnapshot(orderId);
         String sql = "UPDATE don_hang SET trang_thai = ?::order_status_enum, ngay_cap_nhat = NOW() WHERE id = ?";
         
         try (Connection conn = DBUtil.getConnection();
@@ -232,8 +233,40 @@ public class OrderDAO {
             stmt.setInt(2, orderId);
             
             int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0
+                    && snapshot != null
+                    && !"DA_GIAO".equals(snapshot.status)
+                    && "DA_GIAO".equals(status)) {
+                LoyaltyRewardDAO loyaltyRewardDAO = new LoyaltyRewardDAO();
+                loyaltyRewardDAO.grantEligibleRewards(snapshot.userId);
+            }
             return affectedRows > 0;
+            }
         }
+
+    private OrderStatusSnapshot getOrderStatusSnapshot(int orderId) throws SQLException {
+        String sql = "SELECT nguoi_dung_id, trang_thai FROM don_hang WHERE id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, orderId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    OrderStatusSnapshot snapshot = new OrderStatusSnapshot();
+                    snapshot.userId = rs.getInt("nguoi_dung_id");
+                    snapshot.status = rs.getString("trang_thai");
+                    return snapshot;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static class OrderStatusSnapshot {
+        private int userId;
+        private String status;
     }
     
     public boolean deleteOrder(int id) throws SQLException {
